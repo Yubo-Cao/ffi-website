@@ -101,13 +101,13 @@ export const WeeklyPosts = () => {
 
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow-md"
+            className="absolute left-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white dark:bg-slate-700 p-2 shadow-md"
           >
             <MdChevronLeft />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow-md"
+            className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white dark:bg-slate-700 p-2 shadow-md"
           >
             <MdChevronRight />
           </button>
