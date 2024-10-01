@@ -80,7 +80,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
       role: "Southeast Regional Director",
     },
     {
-      name: "Harkush Singh",
+      name: "Harkhush Singh",
       role: "Midwest Regional Director",
     },
   ],

@@ -57,7 +57,7 @@ const Hero = () => {
               className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-5xl sm:leading-tight md:-ml-1 md:text-6xl md:leading-tight"
               variants={itemVariants}
             >
-              Financial Knowledge for Brighter Future
+              Innovating Finance, Shaping Futures
             </motion.h1>
             <motion.p
               className="dark:text-body-color-dark mb-12 text-base !leading-relaxed text-body-color sm:text-lg md:text-xl"
@@ -101,12 +101,12 @@ const Hero = () => {
                 height={196}
                 className="dark:invert"
               />
-              <Image
-                src="/images/hero/hero.png"
-                alt=""
-                className="dark:invert"
-                fill
-              />
+              {/*<Image*/}
+              {/*  src="/images/hero/hero.png"*/}
+              {/*  alt=""*/}
+              {/*  className="dark:invert"*/}
+              {/*  fill*/}
+              {/*/>*/}
             </div>
           </motion.div>
         </div>

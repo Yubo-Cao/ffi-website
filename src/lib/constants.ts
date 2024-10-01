@@ -1,6 +1,6 @@
 import { Inter, Rufina } from "next/font/google";
 
-export const NAME = "Future Finances Inc.";
+export const NAME = "Future Financing Inc.";
 export const DESCRIPTION =
   "Organization providing free, accessible financial education to all.";
 export const PLACEHOLDER = () => {
