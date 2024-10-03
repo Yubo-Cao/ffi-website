@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,8 +7,25 @@ import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import { INTER, LOGO } from "@/lib/constants";
+import { getAuth } from "firebase/auth";
+import { app } from "@/lib/firebase";
+import { MdDashboard, MdLogin } from "react-icons/md";
 
 const Header = () => {
+  // Login status
+  const auth = getAuth(app);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+    });
+  }, [auth, setIsLogin]);
+
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -51,7 +69,7 @@ const Header = () => {
         <div className="container">
           <div className="relative flex items-center justify-between">
             <div className="w-24 max-w-full p-4 xl:mr-12">
-              <Link href="/" className={`header-logo block w-full py-6`}>
+              <Link href="/" className={`header-logo block w-full lg:py-6`}>
                 <Image
                   src={LOGO}
                   alt="logo"
@@ -61,7 +79,7 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="flex w-full items-center justify-between px-4">
+            <div className="flex items-center justify-between w-full px-4">
               <div className="hidden lg:block"></div>
               <div>
                 <button
@@ -96,7 +114,7 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
+                      <li key={index} className="relative group">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -112,7 +130,7 @@ const Header = () => {
                           <>
                             <p
                               onClick={() => handleSubmenu(index)}
-                              className="flex cursor-pointer items-center justify-between py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                              className="flex items-center justify-between py-2 text-base cursor-pointer text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
                             >
                               {menuItem.title}
                               <span className="pl-3">
@@ -151,6 +169,17 @@ const Header = () => {
               <div className="flex items-center justify-end pr-16 lg:pr-0">
                 <div>
                   <ThemeToggler />
+                </div>
+                <div>
+                  {isLogin ? (
+                    <Link href="/dashboard">
+                      <MdDashboard className="text-2xl text-dark dark:text-white" />
+                    </Link>
+                  ) : (
+                    <Link href="/login">
+                      <MdLogin className="text-2xl text-dark dark:text-white" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

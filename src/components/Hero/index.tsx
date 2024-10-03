@@ -38,7 +38,7 @@ const Hero = () => {
   return (
     <motion.section
       id="home"
-      className="relative z-10 overflow-hidden bg-white pb-16 pt-[calc(136px+8rem)] dark:bg-gray-dark"
+      className="relative z-10 overflow-hidden bg-white pb-16 pt-32 lg:pt-[calc(80px+8rem)] dark:bg-gray-dark"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -93,7 +93,7 @@ const Hero = () => {
             className="flex flex-1 items-center justify-center"
             variants={imageVariants}
           >
-            <div className="relative -my-8 aspect-square rounded-full p-36 xl:mb-0">
+            <div className="relative -my-8 aspect-square rounded-full p-12 xl:mb-0">
               <Image
                 src="/logo.png"
                 alt={NAME}
@@ -101,12 +101,6 @@ const Hero = () => {
                 height={196}
                 className="dark:invert"
               />
-              {/*<Image*/}
-              {/*  src="/images/hero/hero.png"*/}
-              {/*  alt=""*/}
-              {/*  className="dark:invert"*/}
-              {/*  fill*/}
-              {/*/>*/}
             </div>
           </motion.div>
         </div>
