@@ -38,14 +38,14 @@ const Hero = () => {
   return (
     <motion.section
       id="home"
-      className="relative z-10 overflow-hidden bg-white pb-16 pt-32 lg:pt-[calc(80px+8rem)] dark:bg-gray-dark"
+      className="relative z-10 overflow-hidden bg-white pb-16 pt-32 dark:bg-gray-dark lg:pt-[calc(80px+8rem)]"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={containerVariants}
     >
       <div className="container">
-        <div className="-mx-4 flex flex-col-reverse flex-wrap px-4 lg:gap-12 xl:flex-row xl:px-12">
+        <div className="flex flex-col-reverse flex-wrap px-4 -mx-4 lg:gap-12 xl:flex-row xl:px-12">
           <motion.div className="max-w-[700px]" variants={containerVariants}>
             <motion.p
               className="text-lg font-semibold md:text-2xl"
@@ -68,13 +68,13 @@ const Hero = () => {
               money.
             </motion.p>
             <motion.div
-              className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0"
+              className="flex flex-wrap items-center gap-4 sm:flex-row"
               variants={containerVariants}
             >
               <motion.div variants={itemVariants}>
                 <Link
                   href={"#"}
-                  className="bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                  className="px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
                 >
                   Get Involved
                 </Link>
@@ -82,7 +82,7 @@ const Hero = () => {
               <motion.div variants={itemVariants}>
                 <Link
                   href={"#"}
-                  className="bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                  className="px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
                 >
                   Learn More
                 </Link>
@@ -90,10 +90,10 @@ const Hero = () => {
             </motion.div>
           </motion.div>
           <motion.div
-            className="flex flex-1 items-center justify-center"
+            className="flex items-center justify-center flex-1"
             variants={imageVariants}
           >
-            <div className="relative -my-8 aspect-square rounded-full p-12 xl:mb-0">
+            <div className="relative p-12 -my-8 rounded-full aspect-square xl:mb-0">
               <Image
                 src="/logo.png"
                 alt={NAME}
