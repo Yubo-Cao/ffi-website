@@ -36,10 +36,10 @@ env:
 jobs:
   # Build job
   build:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
-      - name: Test env
-        run: echo $FIREBASE_ADMIN_CLIENT_EMAIL
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pnpm
