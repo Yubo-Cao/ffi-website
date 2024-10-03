@@ -38,6 +38,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Test env
+        run: echo $FIREBASE_ADMIN_CLIENT_EMAIL
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Pnpm
