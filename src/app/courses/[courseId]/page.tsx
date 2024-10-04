@@ -11,7 +11,8 @@ import {
   query,
   where,
 } from "@firebase/firestore";
-import { db } from "@/lib/firebase";
+import { app, db } from "@/lib/firebase";
+import { getAuth } from "firebase/auth";
 
 type CoursePageProps = {
   params: {
@@ -35,6 +36,16 @@ export default function CoursePage({ params }: CoursePageProps) {
   const [course, setCourse] = useState<Course>(null);
   const [units, setUnits] = useState([]);
   const [status, setStatus] = useState("loading");
+  const auth = getAuth(app);
+
+  if (!auth.currentUser) {
+    return (
+      <div>
+        <Breadcrumb pageName="Course" description="Description" />
+        <h1>Please login to view this page</h1>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const fetch = async () => {

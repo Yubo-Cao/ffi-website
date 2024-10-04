@@ -1,12 +1,9 @@
 import { clientConfig, serverConfig } from "@/lib/config";
-import {
-  authMiddleware,
-  redirectToHome,
-  redirectToLogin,
-} from "next-firebase-auth-edge";
-import { NextRequest, NextResponse } from "next/server";
+import { authMiddleware, redirectToLogin } from "next-firebase-auth-edge";
+import { NextRequest } from "next/server";
 
 const PUBLIC_PATHS = [
+  "/",
   "/register",
   "/login",
   "/about",
