@@ -14,12 +14,20 @@ const Breadcrumb = ({
           <div className="flex flex-wrap items-center -mx-4">
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">
               <div className="mb-8 max-w-[570px] md:mb-0 lg:mb-12">
-                <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                  {pageName}
-                </h1>
-                <p className="text-base font-medium leading-relaxed text-body-color">
-                  {description}
-                </p>
+                {pageName !== "<LOADING>" ? (
+                  <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                    {pageName}
+                  </h1>
+                ) : (
+                  <div className="w-1/2 h-8 mb-5 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
+                )}
+                {description !== "<LOADING>" ? (
+                  <p className="text-base font-medium leading-relaxed text-body-color">
+                    {description}
+                  </p>
+                ) : (
+                  <div className="w-full h-4 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
+                )}
               </div>
             </div>
             <div className="w-full px-4 md:w-4/12 lg:w-5/12">
@@ -34,9 +42,13 @@ const Breadcrumb = ({
                     </Link>
                     <span className="block w-2 h-2 mr-3 rotate-45 border-t-2 border-r-2 border-body-color"></span>
                   </li>
-                  <li className="text-base font-medium text-primary">
-                    {pageName}
-                  </li>
+                  {pageName !== "<LOADING>" ? (
+                    <li className="text-base font-medium text-primary">
+                      {pageName}
+                    </li>
+                  ) : (
+                    <li className="w-20 h-6 ml-3 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></li>
+                  )}
                 </ul>
               </div>
             </div>

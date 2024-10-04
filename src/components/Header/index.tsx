@@ -1,15 +1,15 @@
 "use client";
 
+import { INTER, LOGO } from "@/lib/constants";
+import { app } from "@/lib/firebase";
+import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MdFace, MdLogin } from "react-icons/md";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
-import { INTER, LOGO } from "@/lib/constants";
-import { getAuth } from "firebase/auth";
-import { app } from "@/lib/firebase";
-import { MdDashboard, MdLogin } from "react-icons/md";
 
 const Header = () => {
   // Login status
@@ -173,7 +173,15 @@ const Header = () => {
                 <div>
                   {isLogin ? (
                     <Link href="/dashboard">
-                      <MdDashboard className="text-2xl text-dark dark:text-white" />
+                      {auth.currentUser?.photoURL ? (
+                        <img
+                          src={auth.currentUser?.photoURL}
+                          alt="profile"
+                          className="w-10 h-10 rounded-full"
+                        />
+                      ) : (
+                        <MdFace className="text-2xl text-dark dark:text-white" />
+                      )}
                     </Link>
                   ) : (
                     <Link href="/login">
