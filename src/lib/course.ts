@@ -97,10 +97,6 @@ export type Lesson = ReadingLesson | QuizLesson;
 
 export interface Question {
   /**
-   * The id of the question.
-   */
-  id: string;
-  /**
    * The question.
    */
   question: string;
