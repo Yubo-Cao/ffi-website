@@ -215,6 +215,55 @@ async function getCourseImpl(courseId: string): Promise<Course> {
   };
 }
 
+export interface CourseSummary {
+  id: string;
+  title: string;
+  description: string;
+}
+
+const getCourseSummaryImpl = async (
+  courseId: string,
+): Promise<CourseSummary> => {
+  const course = await getDoc(doc(COURSE_COL, courseId));
+  if (!course.exists()) {
+    throw new Error("Course not found");
+  }
+  const courseData = course.data();
+  return {
+    id: course.id,
+    title: courseData.title,
+    description: courseData.description,
+  };
+};
+
+export const getCourseSummary = unstable_cache(
+  getCourseSummaryImpl,
+  ["courses", "getCourseSummary"],
+  {
+    revalidate: 60 * 60 * 24, // 1 day
+  },
+);
+
+const getCoursesSummaryImpl = async (): Promise<CourseSummary[]> => {
+  const coursesSnapshot = await getDocs(collection(db, "courses"));
+  return coursesSnapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      title: data.title,
+      description: data.description,
+    };
+  });
+};
+
+export const getCoursesSummary = unstable_cache(
+  getCoursesSummaryImpl,
+  ["courses", "getCoursesSummary"],
+  {
+    revalidate: 60 * 60 * 24, // 1 day
+  },
+);
+
 export const getCourse = unstable_cache(
   getCourseImpl,
   ["courses", "getCourse"],
