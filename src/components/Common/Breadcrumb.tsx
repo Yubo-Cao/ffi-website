@@ -2,31 +2,39 @@ import Link from "next/link";
 
 const Breadcrumb = ({
   pageName,
+  parentPageName = "Home",
   description,
 }: {
   pageName: string;
+  parentPageName?: string;
   description: string;
 }) => {
   return (
     <>
       <section className="relative z-10 overflow-hidden pt-[120px] sm:pt-[180px] lg:pt-[206px]">
         <div className="container">
-          <div className="flex flex-wrap items-center -mx-4">
+          <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">
-              <div className="mb-8 max-w-[570px] md:mb-0 lg:mb-12">
+              <div
+                className={`max-w-[570px] ${description && "mb-8 md:mb-0 lg:mb-12"}`}
+              >
                 {pageName !== "<LOADING>" ? (
-                  <h1 className="mb-5 text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                  <h1
+                    className={`${description && "mb-5"} text-2xl font-bold text-black dark:text-white sm:text-3xl`}
+                  >
                     {pageName}
                   </h1>
                 ) : (
-                  <div className="w-1/2 h-8 mb-5 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
+                  <div className="mb-5 h-8 w-1/2 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
                 )}
                 {description !== "<LOADING>" ? (
-                  <p className="text-base font-medium leading-relaxed text-body-color">
-                    {description}
-                  </p>
+                  description && (
+                    <p className="text-base font-medium leading-relaxed text-body-color">
+                      {description}
+                    </p>
+                  )
                 ) : (
-                  <div className="w-full h-4 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
+                  <div className="h-4 w-full animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
                 )}
               </div>
             </div>
@@ -38,16 +46,20 @@ const Breadcrumb = ({
                       href="/"
                       className="pr-1 text-base font-medium text-body-color hover:text-primary"
                     >
-                      Home
+                      {parentPageName !== "<LOADING>" ? (
+                        parentPageName
+                      ) : (
+                        <div className="h-6 w-20 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
+                      )}
                     </Link>
-                    <span className="block w-2 h-2 mr-3 rotate-45 border-t-2 border-r-2 border-body-color"></span>
+                    <span className="mr-3 block h-2 w-2 rotate-45 border-r-2 border-t-2 border-body-color"></span>
                   </li>
                   {pageName !== "<LOADING>" ? (
                     <li className="text-base font-medium text-primary">
                       {pageName}
                     </li>
                   ) : (
-                    <li className="w-20 h-6 ml-3 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></li>
+                    <li className="ml-3 h-6 w-20 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></li>
                   )}
                 </ul>
               </div>
