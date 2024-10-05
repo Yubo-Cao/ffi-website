@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { QuizLesson, setLesson as updateLesson } from "@/lib/course";
-import { MdCheck } from "react-icons/md";
+import { MdAdd, MdCheck, MdDelete } from "react-icons/md";
 
 interface QuizComponentProps {
   lesson: QuizLesson;
@@ -20,9 +20,9 @@ export default function QuizComponent({
   const [quizFeedback, setQuizFeedback] = useState(null);
   const [editedQuestions, setEditedQuestions] = useState(lesson?.questions);
 
-  if (!lesson) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    setEditedQuestions(lesson?.questions);
+  }, [lesson]);
 
   const handleQuizAnswer = (questionIndex: number, answer: string) => {
     setQuizAnswers({ ...quizAnswers, [questionIndex]: answer });
@@ -39,6 +39,10 @@ export default function QuizComponent({
     });
     setQuizFeedback(feedback);
   };
+
+  if (!lesson) {
+    return <div>Loading...</div>;
+  }
 
   const handleSave = () => {
     updateLesson({ ...lesson, questions: editedQuestions })
@@ -57,7 +61,19 @@ export default function QuizComponent({
       {isEditing ? (
         <div>
           {editedQuestions.map((question, index) => (
-            <div key={index} className="mb-6">
+            <div key={index} className="relative mb-6">
+              <div className="absolute right-0 top-0">
+                <button
+                  onClick={() => {
+                    const updatedQuestions = [...editedQuestions];
+                    updatedQuestions.splice(index, 1);
+                    setEditedQuestions(updatedQuestions);
+                  }}
+                  className="text-red-600"
+                >
+                  <MdDelete size={20} />
+                </button>
+              </div>
               <label className="mb-2 block font-semibold">
                 Question {index + 1}:
               </label>
@@ -86,8 +102,34 @@ export default function QuizComponent({
                   className="mb-2 w-full rounded-md border p-2"
                 />
               ))}
+              <label className="mb-2 block font-semibold">Answer:</label>
+              <input
+                type="text"
+                value={question.answer}
+                onChange={(e) => {
+                  const updatedQuestions = [...editedQuestions];
+                  updatedQuestions[index].answer = e.target.value;
+                  setEditedQuestions(updatedQuestions);
+                }}
+                className="mb-4 w-full rounded-md border p-2"
+              />
             </div>
           ))}
+          <button
+            onClick={() =>
+              setEditedQuestions([
+                ...editedQuestions,
+                {
+                  question: "",
+                  choices: ["", "", "", ""],
+                  answer: "",
+                },
+              ])
+            }
+            className="flex items-center rounded-md bg-primary px-4 py-2 text-white transition hover:bg-opacity-80"
+          >
+            <MdAdd className="mr-2" /> Add Question
+          </button>
           <button
             onClick={handleSave}
             className="mt-4 flex items-center rounded-md bg-primary px-4 py-2 text-white transition hover:bg-opacity-80"
