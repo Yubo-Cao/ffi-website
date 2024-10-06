@@ -1,11 +1,10 @@
 "use client";
 
 import { NAME } from "@/lib/constants";
-import { app } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { createUser } from "@/lib/course";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -25,7 +24,7 @@ export default function Register() {
     }
 
     try {
-      await createUserWithEmailAndPassword(getAuth(app), email, password);
+      await createUser(email, password);
       router.push("/login");
     } catch (e) {
       setError((e as Error).message);
@@ -33,9 +32,9 @@ export default function Register() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-8">
-      <div className="w-full bg-white rounded-lg shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
-        <div className="p-6 space-y-4 sm:p-8 md:space-y-6">
+    <main className="flex min-h-screen flex-col items-center justify-center p-8">
+      <div className="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+        <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
             Register for {NAME}
           </h1>
@@ -47,7 +46,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
                 Your email
               </label>
@@ -65,7 +64,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
                 Password
               </label>
@@ -83,7 +82,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="confirm-password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
               >
                 Confirm password
               </label>
@@ -100,7 +99,7 @@ export default function Register() {
             </div>
             {error && (
               <div
-                className="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded"
+                className="relative rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
                 role="alert"
               >
                 <span className="block sm:inline">{error}</span>

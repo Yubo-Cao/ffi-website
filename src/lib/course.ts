@@ -6,10 +6,12 @@ import {
   getDocs,
   orderBy,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "@firebase/firestore";
-import { db } from "@/lib/firebase";
+import { app, db } from "@/lib/firebase";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 export interface Course {
   /**
@@ -371,4 +373,26 @@ export const setLesson = async (updatedLesson: Lesson): Promise<void> => {
       questions: (updatedLesson as QuizLesson).questions,
     }),
   });
+};
+
+export const createUser = async (
+  email: string,
+  password: string,
+): Promise<User> => {
+  const user = await createUserWithEmailAndPassword(
+    getAuth(app),
+    email,
+    password,
+  );
+  const userRef = await setDoc(doc(USER_COL, user.user.uid), {
+    email: user.user.email,
+    badges: [],
+    lastLogin: new Date(),
+    name: user.user.displayName,
+  });
+  return {
+    id: user.user.uid,
+    email: user.user.email,
+    name: user.user.displayName,
+  };
 };

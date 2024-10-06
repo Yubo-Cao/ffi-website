@@ -18,6 +18,11 @@ export default function EnrolledCourses() {
   const auth = getAuth(app);
   const [user, setUser] = useState(null);
 
+  const showCourses =
+    allCourses?.filter(
+      (course) => !courses?.map((course) => course.id).includes(course.id),
+    ) || [];
+
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -42,11 +47,8 @@ export default function EnrolledCourses() {
     if (user) {
       try {
         await enrollCourse(user.uid, courseId);
-        const userRef = await getDoc(doc(db, "users", user.uid));
-        if (userRef.exists()) {
-          const userData = userRef.data();
-          setCourses(userData.enrolledCourses);
-        }
+        setCourses([...courses, await getCourseSummary(courseId)]);
+        setAllCourses(allCourses.filter((course) => course.id !== courseId));
       } catch (e) {
         console.error(e);
       }
@@ -86,14 +88,7 @@ export default function EnrolledCourses() {
       )}
       <section
         id="available"
-        className={`${
-          allCourses?.filter(
-            (course) =>
-              !courses?.map((course) => course.id).includes(course.id),
-          ).length === 0
-            ? "hidden"
-            : ""
-        }`}
+        className={`${showCourses.length === 0 ? "hidden" : ""}`}
       >
         <h2 className="mb-2 mt-12 text-3xl font-semibold">Available Courses</h2>
         <p className="mb-4 text-body-color">
@@ -107,25 +102,20 @@ export default function EnrolledCourses() {
           </div>
         ) : (
           <div className="grid grid-cols-[repeat(auto-fit,minmax(196px,256px))] gap-4">
-            {allCourses
-              .filter(
-                (course) =>
-                  !courses?.map((course) => course.id).includes(course.id),
-              )
-              .map((course) => (
-                <div
-                  key={course.id}
-                  className="group flex cursor-pointer flex-col rounded-md bg-gray-100 p-4 transition hover:bg-primary dark:bg-gray-800 dark:hover:bg-primary"
-                  onClick={() => handleEnroll(course.id)}
-                >
-                  <h3 className="text-lg font-semibold group-hover:text-white">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-body-color group-hover:text-white">
-                    {course.description.substring(0, 100) + "..."}
-                  </p>
-                </div>
-              ))}
+            {showCourses.map((course) => (
+              <div
+                key={course.id}
+                className="group flex cursor-pointer flex-col rounded-md bg-gray-100 p-4 transition hover:bg-primary dark:bg-gray-800 dark:hover:bg-primary"
+                onClick={() => handleEnroll(course.id)}
+              >
+                <h3 className="text-lg font-semibold group-hover:text-white">
+                  {course.title}
+                </h3>
+                <p className="text-sm text-body-color group-hover:text-white">
+                  {course.description.substring(0, 100) + "..."}
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </section>
