@@ -1,7 +1,3 @@
-"use server";
-// ref: https://github.com/vercel/next.js/discussions/51397
-// needed for the `unstable_cache` function
-
 import {
   addDoc,
   collection,
@@ -14,7 +10,6 @@ import {
   where,
 } from "@firebase/firestore";
 import { db } from "@/lib/firebase";
-import { unstable_cache } from "next/cache";
 
 export interface Course {
   /**
@@ -178,7 +173,7 @@ const USER_COL = collection(db, "users");
 const ENROLLMENT_COL = collection(db, "enrollments");
 const LEARNING_PROGRESS_COL = collection(db, "learningProgress");
 
-async function getCourseImpl(courseId: string): Promise<Course> {
+export async function getCourse(courseId: string): Promise<Course> {
   const course = await getDoc(doc(COURSE_COL, courseId));
   if (!course.exists()) {
     throw new Error("Course not found");
@@ -221,7 +216,7 @@ export interface CourseSummary {
   description: string;
 }
 
-const getCourseSummaryImpl = async (
+export const getCourseSummary = async (
   courseId: string,
 ): Promise<CourseSummary> => {
   const course = await getDoc(doc(COURSE_COL, courseId));
@@ -236,15 +231,7 @@ const getCourseSummaryImpl = async (
   };
 };
 
-export const getCourseSummary = unstable_cache(
-  getCourseSummaryImpl,
-  ["courses", "getCourseSummary"],
-  {
-    revalidate: 60 * 60 * 24, // 1 day
-  },
-);
-
-const getCoursesSummaryImpl = async (): Promise<CourseSummary[]> => {
+export const getCoursesSummary = async (): Promise<CourseSummary[]> => {
   const coursesSnapshot = await getDocs(collection(db, "courses"));
   return coursesSnapshot.docs.map((doc) => {
     const data = doc.data();
@@ -256,23 +243,7 @@ const getCoursesSummaryImpl = async (): Promise<CourseSummary[]> => {
   });
 };
 
-export const getCoursesSummary = unstable_cache(
-  getCoursesSummaryImpl,
-  ["courses", "getCoursesSummary"],
-  {
-    revalidate: 60 * 60 * 24, // 1 day
-  },
-);
-
-export const getCourse = unstable_cache(
-  getCourseImpl,
-  ["courses", "getCourse"],
-  {
-    revalidate: 60 * 60 * 24 * 7, // 1 week
-  },
-);
-
-async function getUnitImpl(unitId: string): Promise<Unit> {
+export async function getUnit(unitId: string): Promise<Unit> {
   const unit = await getDoc(doc(UNIT_COL, unitId));
   if (!unit.exists()) {
     throw new Error("Unit not found");
@@ -296,11 +267,7 @@ async function getUnitImpl(unitId: string): Promise<Unit> {
   };
 }
 
-export const getUnit = unstable_cache(getUnitImpl, ["units", "getUnit"], {
-  revalidate: 60 * 60 * 24 * 7, // 1 week
-});
-
-const getEnrollmentsImpl = async (userId: string): Promise<Enrollment[]> => {
+export const getEnrollments = async (userId: string): Promise<Enrollment[]> => {
   const enrollments = await getDocs(
     query(
       collection(db, "enrollments"),
@@ -314,14 +281,6 @@ const getEnrollmentsImpl = async (userId: string): Promise<Enrollment[]> => {
     createdAt: enrollment.data().createdAt.toDate(),
   }));
 };
-
-export const getEnrollments = unstable_cache(
-  getEnrollmentsImpl,
-  ["enrollments", "getEnrollments"],
-  {
-    revalidate: 60 * 60 * 24, // 1 day
-  },
-);
 
 export const enrollCourse = async (
   userId: string,
@@ -362,7 +321,7 @@ export const ensureEnrolled = async (
   return courseEnrollment;
 };
 
-const getLearningProgressImpl = async (
+export const getLearningProgress = async (
   userId: string,
   courseId?: string,
 ): Promise<LearningProgress[]> => {
@@ -382,14 +341,6 @@ const getLearningProgressImpl = async (
     createdAt: progress.data().createdAt.toDate(),
   }));
 };
-
-export const getLearningProgress = unstable_cache(
-  getLearningProgressImpl,
-  ["learningProgress", "getLearningProgress"],
-  {
-    revalidate: 60 * 60, // 1 hour
-  },
-);
 
 export async function getLesson(lessonId: string): Promise<Lesson> {
   const lesson = await getDoc(doc(LESSON_COL, lessonId));
