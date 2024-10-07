@@ -1,6 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
+import { useAuth } from "@/components/Common/UserProvider";
 import {
   Course,
   getCourse,
@@ -8,8 +9,6 @@ import {
   LearningProgress,
   Unit,
 } from "@/lib/course";
-import { isAdmin as checkIsAdmin } from "@/lib/user";
-import { getAuth } from "firebase/auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdError } from "react-icons/md";
@@ -64,20 +63,8 @@ export default function CoursePage({ params }: CoursePageProps) {
     course: "loading",
     learningProgress: "loading",
   });
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [learningProgress, setLearningProgress] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const auth = getAuth();
-
-  useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
-      setUser(user);
-      checkIsAdmin(user.uid).then((isAdmin) => {
-        setIsAdmin(isAdmin);
-      });
-    });
-  }, []);
 
   useEffect(() => {
     let stat = { ...status };

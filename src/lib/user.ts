@@ -32,7 +32,7 @@ export const createUser = async (
     email,
     password,
   );
-  const userRef = await setDoc(doc(USER_COL, user.user.uid), {
+  await setDoc(doc(USER_COL, user.user.uid), {
     email: user.user.email,
     badges: [],
     lastLogin: new Date(),
