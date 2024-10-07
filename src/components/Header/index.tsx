@@ -162,10 +162,12 @@ const Header = () => {
                   {isLogin ? (
                     <Link href="/dashboard">
                       {user.photoURL ? (
-                        <img
+                        <Image
                           src={user.photoURL}
                           alt="profile"
                           className="h-10 w-10 rounded-full"
+                          width={40}
+                          height={40}
                         />
                       ) : (
                         <MdFace className="text-2xl text-dark dark:text-white" />

@@ -37,6 +37,7 @@ function SingleUnit(props: {
         <ul className="flex flex-row gap-2">
           {props.unit.lessons.map((lesson) => (
             <div
+              key={lesson.id}
               className={`size-8 rounded-md ${
                 {
                   "Not Started": "bg-gray-200 dark:bg-gray-700",
@@ -93,7 +94,7 @@ export default function CoursePage({ params }: CoursePageProps) {
           console.error(e);
         });
     }
-  }, [courseId, user]);
+  }, [courseId, user, status]);
 
   const header = (
     <Breadcrumb
