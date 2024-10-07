@@ -1,5 +1,5 @@
 import { useUnit } from "@/components/Lesson/UnitProvider";
-import { Lesson, Unit } from "@/lib/course";
+import { Lesson } from "@/lib/course";
 import Link from "next/link";
 import { useCallback } from "react";
 

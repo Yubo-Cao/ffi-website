@@ -3,7 +3,6 @@ import {
   getFirestore,
   initializeFirestore,
   memoryLocalCache,
-  persistentLocalCache,
 } from "@firebase/firestore";
 import { initializeApp } from "firebase/app";
 
