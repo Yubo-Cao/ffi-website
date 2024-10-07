@@ -10,6 +10,7 @@ import {
   LearningProgress,
   Unit,
 } from "@/lib/course";
+import { isAdmin as checkIsAdmin } from "@/lib/user";
 import Link from "next/link";
 import { MdError } from "react-icons/md";
 
@@ -65,11 +66,16 @@ export default function CoursePage({ params }: CoursePageProps) {
   });
   const [user, setUser] = useState(null);
   const [learningProgress, setLearningProgress] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const auth = getAuth();
 
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
       setUser(user);
+      checkIsAdmin(user.uid).then((isAdmin) => {
+        setIsAdmin(isAdmin);
+      });
     });
   }, []);
 

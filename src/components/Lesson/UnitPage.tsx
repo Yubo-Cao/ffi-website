@@ -2,7 +2,6 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import {
   Course,
   getCourse,
@@ -12,6 +11,7 @@ import {
   Unit,
 } from "@/lib/course";
 import Link from "next/link";
+import { useAuth } from "@/components/Common/UserProvider";
 
 export type UnitPageProps = {
   params: {
@@ -62,16 +62,9 @@ export default function UnitPage({ params }: UnitPageProps) {
     course: "loading",
     learningProgress: "loading",
   });
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [learningProgress, setLearningProgress] =
     useState<LearningProgress[]>(null);
-  const auth = getAuth();
-
-  useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
-      setUser(user);
-    });
-  }, []);
 
   useEffect(() => {
     getUnit(unitId)

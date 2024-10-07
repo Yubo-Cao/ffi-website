@@ -3,11 +3,11 @@ import { clientConfig } from "@/lib/config";
 import {
   getFirestore,
   initializeFirestore,
-  memoryLocalCache,
+  persistentLocalCache,
 } from "@firebase/firestore";
 
 export const app = initializeApp(clientConfig);
 initializeFirestore(app, {
-  localCache: memoryLocalCache(),
+  localCache: persistentLocalCache(),
 });
 export const db = getFirestore(app);

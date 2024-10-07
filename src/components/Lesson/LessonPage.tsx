@@ -9,12 +9,13 @@ import {
   getUnit,
   LearningProgress,
   Lesson,
-  Unit,
+  Unit
 } from "@/lib/course";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import QuizLesson from "@/components/Lesson/QuizLesson";
-import { MdChevronLeft, MdChevronRight, MdEdit, MdError } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdError } from "react-icons/md";
 import Link from "next/link";
+import { useEdit } from "@/components/Lesson/EditProvider";
 
 export type LessonPageProps = {
   params: {
@@ -33,25 +34,19 @@ export default function LessonPage({ params }: LessonPageProps) {
   const [status, setStatus] = useState({
     lesson: "loading",
     unit: "loading",
-    learningProgress: "loading",
+    learningProgress: "loading"
   });
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const auth = getAuth();
+  const { isEditing, setIsEditing } = useEdit();
 
-  // Ensure user is in sync with auth
   useEffect(() => {
     return auth.onAuthStateChanged((user) => {
       setUser(user);
-      if (user) {
-        // TODO: Implement true admin check
-        setIsAdmin(user.email === "cao2006721@gmail.com");
-      }
     });
   }, []);
-  // Fetch lesson, unit, and learning progress
+
   useEffect(() => {
     getLesson(lessonId)
       .then((l) => {
@@ -67,7 +62,7 @@ export default function LessonPage({ params }: LessonPageProps) {
         setStatus((prevStatus) => ({
           ...prevStatus,
           lesson: "error",
-          unit: "error",
+          unit: "error"
         }));
         console.error(e);
       });
@@ -76,18 +71,18 @@ export default function LessonPage({ params }: LessonPageProps) {
       getLearningProgress(user.uid)
         .then((progress) => {
           const lessonProgress = progress.find(
-            (lp) => lp.lessonId === lessonId,
+            (lp) => lp.lessonId === lessonId
           );
           setLearningProgress(lessonProgress);
           setStatus((prevStatus) => ({
             ...prevStatus,
-            learningProgress: "success",
+            learningProgress: "success"
           }));
         })
         .catch((e) => {
           setStatus((prevStatus) => ({
             ...prevStatus,
-            learningProgress: "error",
+            learningProgress: "error"
           }));
           console.error(e);
         });
@@ -202,21 +197,6 @@ export default function LessonPage({ params }: LessonPageProps) {
                 <p>Status: {learningProgress.progress}</p>
               </div>
             )}
-            {isAdmin && (
-              <div className="fixed bottom-24 right-24 z-[100]">
-                <button
-                  onClick={handleEditToggle}
-                  aria-label="edit lesson"
-                  className="flex size-16 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp disabled:cursor-not-allowed disabled:bg-gray-300"
-                  disabled={isEditing || !lesson}
-                >
-                  <span className="text-lg text-white">
-                    <MdEdit className="size-8" />
-                  </span>
-                </button>
-              </div>
-            )}
-
             <div className="mt-16 flex justify-between">
               {unit && lesson && unit.lessons && unit.lessons.length > 0 && (
                 <>
@@ -230,13 +210,13 @@ export default function LessonPage({ params }: LessonPageProps) {
                   )}
                   {unit.lessons.findIndex((l) => l.id === lesson.id) <
                     unit.lessons.length - 1 && (
-                    <Link
-                      href={`/courses/${params.courseId}/${params.unitId}/${unit.lessons[unit.lessons.findIndex((l) => l.id === lesson.id) + 1].id}`}
-                      className="rounded-md bg-primary px-4 py-2 text-white"
-                    >
-                      Next Lesson
-                    </Link>
-                  )}
+                      <Link
+                        href={`/courses/${params.courseId}/${params.unitId}/${unit.lessons[unit.lessons.findIndex((l) => l.id === lesson.id) + 1].id}`}
+                        className="rounded-md bg-primary px-4 py-2 text-white"
+                      >
+                        Next Lesson
+                      </Link>
+                    )}
                 </>
               )}
             </div>

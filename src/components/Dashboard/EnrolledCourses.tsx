@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import { app, db } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { doc, getDoc } from "@firebase/firestore";
 import {
   enrollCourse,
@@ -11,12 +10,12 @@ import {
   getEnrollments,
 } from "@/lib/course";
 import Link from "next/link";
+import { useAuth } from "@/components/Common/UserProvider";
 
 export default function EnrolledCourses() {
   const [courses, setCourses] = useState(null);
   const [allCourses, setAllCourses] = useState(null);
-  const auth = getAuth(app);
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
 
   const showCourses =
     allCourses?.filter(
@@ -24,9 +23,8 @@ export default function EnrolledCourses() {
     ) || [];
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
+    const fetch = async () => {
       if (user) {
-        setUser(user);
         const userRef = await getDoc(doc(db, "users", user.uid));
         if (userRef.exists()) {
           const enrolledCourses = await getEnrollments(user.uid);
@@ -40,8 +38,11 @@ export default function EnrolledCourses() {
         const availableCourses = await getCoursesSummary();
         setAllCourses(availableCourses.filter((course) => course));
       }
+    };
+    fetch().catch((e) => {
+      console.error(e);
     });
-  }, []);
+  }, [user]);
 
   const handleEnroll = async (courseId) => {
     if (user) {
