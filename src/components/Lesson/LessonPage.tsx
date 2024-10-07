@@ -33,6 +33,10 @@ export default function LessonPage({ params }: LessonPageProps) {
     async () => await getLesson(params.lessonId),
   );
 
+  useEffect(() => {
+    if (!isLessonLoading) document.title = `${lesson.title}`;
+  }, [lesson, isLessonLoading]);
+
   const header = (
     <Breadcrumb
       pageName={`${lessonError != null ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title}`}
@@ -62,10 +66,6 @@ export default function LessonPage({ params }: LessonPageProps) {
       </div>
     );
   }
-
-  useEffect(() => {
-    document.title = `${lesson.title}`;
-  }, [lesson]);
 
   return (
     <>
