@@ -1,14 +1,14 @@
 "use client";
 
+import ThemeToggler from "./ThemeToggler";
+import menuData from "./menuData";
+import { useAuth } from "@/components/Common/UserProvider";
 import { INTER, LOGO } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdFace, MdLogin } from "react-icons/md";
-import ThemeToggler from "./ThemeToggler";
-import menuData from "./menuData";
-import { useAuth } from "@/components/Common/UserProvider";
 
 const Header = () => {
   const { user } = useAuth();

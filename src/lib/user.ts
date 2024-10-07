@@ -1,5 +1,5 @@
-import { collection, doc, getDoc, setDoc } from "@firebase/firestore";
 import { app, db } from "@/lib/firebase";
+import { collection, doc, getDoc, setDoc } from "@firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 export interface User {

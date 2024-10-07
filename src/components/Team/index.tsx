@@ -1,10 +1,10 @@
 "use client";
 
 import SectionTitle from "@/components/Common/SectionTitle";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { MdFace } from "react-icons/md";
 import { motion, useAnimationControls } from "framer-motion";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { MdFace } from "react-icons/md";
 
 type Committee =
   | "executive"
@@ -213,7 +213,9 @@ export const Team = () => {
                 setCommittee(key as Committee);
               }}
               className={`${
-                committee === key ? "font-bold underline underline-offset-8" : ""
+                committee === key
+                  ? "font-bold underline underline-offset-8"
+                  : ""
               } flex-wrap px-4 py-2 text-primary`}
             >
               {key[0].toUpperCase() + key.slice(1)}

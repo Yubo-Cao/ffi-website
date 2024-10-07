@@ -1,8 +1,8 @@
 "use client";
 
+import { useAuth } from "@/components/Common/UserProvider";
 import { createContext, useContext, useState } from "react";
 import { MdEdit } from "react-icons/md";
-import { useAuth } from "@/components/Common/UserProvider";
 
 const EditContext = createContext({
   isEditing: false,

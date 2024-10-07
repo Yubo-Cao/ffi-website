@@ -1,9 +1,9 @@
+import "../styles/index.css";
+import { Providers } from "./providers";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import { RUFINA } from "@/lib/constants";
-import "../styles/index.css";
-import { Providers } from "./providers";
 
 export default function RootLayout({
   children,

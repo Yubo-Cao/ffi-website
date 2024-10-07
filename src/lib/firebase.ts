@@ -1,13 +1,14 @@
-import { initializeApp } from "firebase/app";
 import { clientConfig } from "@/lib/config";
 import {
   getFirestore,
   initializeFirestore,
+  memoryLocalCache,
   persistentLocalCache,
 } from "@firebase/firestore";
+import { initializeApp } from "firebase/app";
 
 export const app = initializeApp(clientConfig);
 initializeFirestore(app, {
-  localCache: persistentLocalCache(),
+  localCache: memoryLocalCache(),
 });
 export const db = getFirestore(app);

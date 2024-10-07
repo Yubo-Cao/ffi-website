@@ -1,7 +1,6 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
-import { Metadata } from "next";
 import { NAME } from "@/lib/constants";
+import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {

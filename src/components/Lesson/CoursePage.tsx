@@ -1,8 +1,6 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import {
   Course,
   getCourse,
@@ -11,7 +9,9 @@ import {
   Unit,
 } from "@/lib/course";
 import { isAdmin as checkIsAdmin } from "@/lib/user";
+import { getAuth } from "firebase/auth";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { MdError } from "react-icons/md";
 
 export type CoursePageProps = {

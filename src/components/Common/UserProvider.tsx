@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { getAuth, User } from "firebase/auth";
 import { isAdmin as checkIsAdmin } from "@/lib/user";
+import { getAuth, User } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext<{
   user: User;
@@ -28,7 +28,7 @@ const UserProvider = ({ children }) => {
         setIsAdmin(false);
       }
     });
-  }, [setUser, setIsAdmin]);
+  }, [setUser, setIsAdmin, auth]);
   return (
     <UserContext.Provider value={{ user, isAdmin }}>
       {children}

@@ -1,10 +1,10 @@
 "use client";
 
 import { NAME } from "@/lib/constants";
+import { createUser } from "@/lib/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { createUser } from "@/lib/course";
 
 export default function Register() {
   const [email, setEmail] = useState("");

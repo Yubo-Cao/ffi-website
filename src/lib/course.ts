@@ -1,3 +1,5 @@
+import { db } from "@/lib/firebase";
+import { User, USER_COL } from "@/lib/user";
 import {
   addDoc,
   collection,
@@ -9,8 +11,6 @@ import {
   updateDoc,
   where,
 } from "@firebase/firestore";
-import { User, USER_COL } from "@/lib/user";
-import { db } from "@/lib/firebase";
 
 export interface Course {
   /**
@@ -252,6 +252,26 @@ export async function getUnit(unitId: string): Promise<Unit> {
   };
 }
 
+export async function addLesson(
+  unitId: string,
+  lesson: Omit<Lesson, "id">,
+): Promise<Lesson> {
+  const lessonRef = await addDoc(LESSON_COL, {
+    ...lesson,
+    unit: doc(UNIT_COL, unitId),
+  });
+  return {
+    id: lessonRef.id,
+    ...lesson,
+  } as Lesson;
+}
+
+export async function removeLesson(lessonId: string): Promise<void> {
+  await updateDoc(doc(LESSON_COL, lessonId), {
+    deleted: true,
+  });
+}
+
 export const getEnrollments = async (userId: string): Promise<Enrollment[]> => {
   const enrollments = await getDocs(
     query(
@@ -309,12 +329,14 @@ export const ensureEnrolled = async (
 export const getLearningProgress = async (
   userId: string,
   courseId?: string,
+  lessonId?: string,
 ): Promise<LearningProgress[]> => {
   const learningProgress = await getDocs(
     query(
       LEARNING_PROGRESS_COL,
       where("user", "==", doc(USER_COL, userId)),
       ...(courseId ? [where("course", "==", doc(COURSE_COL, courseId))] : []),
+      ...(lessonId ? [where("lesson", "==", doc(LESSON_COL, lessonId))] : []),
     ),
   );
   return learningProgress.docs.map((progress) => ({
@@ -355,5 +377,14 @@ export const setLesson = async (updatedLesson: Lesson): Promise<void> => {
     ...(updatedLesson.type === "quiz" && {
       questions: (updatedLesson as QuizLesson).questions,
     }),
+  });
+};
+
+export const updateLessonTitle = async (
+  lessonId: string,
+  title: string,
+): Promise<void> => {
+  await updateDoc(doc(LESSON_COL, lessonId), {
+    title,
   });
 };

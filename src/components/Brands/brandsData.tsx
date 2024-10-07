@@ -14,7 +14,7 @@ const brandsData: Brand[] = [
     href: "https://dmun.org/",
     image: "/images/brands/dmun.png",
     imageLight: "/images/brands/dmun.png",
-  }
+  },
 ];
 
 export default brandsData;

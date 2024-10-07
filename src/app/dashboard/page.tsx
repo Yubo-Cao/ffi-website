@@ -1,11 +1,10 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
+import EnrolledCourses from "@/components/Dashboard/EnrolledCourses";
+import { clientConfig, serverConfig } from "@/lib/config";
 import { NAME } from "@/lib/constants";
 import { Metadata } from "next";
-import EnrolledCourses from "@/components/Dashboard/EnrolledCourses";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
-import { clientConfig, serverConfig } from "@/lib/config";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {

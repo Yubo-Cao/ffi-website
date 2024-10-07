@@ -24,6 +24,6 @@ const menuData: Menu[] = [
     title: "Get Involved",
     path: "/get-involved",
     newTab: false,
-  }
+  },
 ];
 export default menuData;

@@ -1,7 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/components/Common/UserProvider";
 import {
   Course,
   getCourse,
@@ -11,7 +11,7 @@ import {
   Unit,
 } from "@/lib/course";
 import Link from "next/link";
-import { useAuth } from "@/components/Common/UserProvider";
+import { useEffect, useState } from "react";
 
 export type UnitPageProps = {
   params: {

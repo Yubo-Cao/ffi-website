@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEdit } from "@/components/Lesson/EditProvider";
 import { QuizLesson, setLesson as updateLesson } from "@/lib/course";
+import React, { useEffect, useState } from "react";
 import { MdAdd, MdCheck, MdDelete } from "react-icons/md";
 
 interface QuizComponentProps {
   lesson: QuizLesson;
   setLesson: (lesson: QuizLesson) => void;
-  isEditing: boolean;
-  onEditToggle: () => void;
 }
 
 export default function QuizComponent({
   lesson,
-  isEditing,
-  onEditToggle,
   setLesson,
 }: QuizComponentProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizFeedback, setQuizFeedback] = useState(null);
   const [editedQuestions, setEditedQuestions] = useState(lesson?.questions);
+  const { isEditing, setIsEditing } = useEdit();
 
   useEffect(() => {
     setEditedQuestions(lesson?.questions);
@@ -48,7 +46,7 @@ export default function QuizComponent({
     updateLesson({ ...lesson, questions: editedQuestions })
       .then(() => {
         setLesson({ ...lesson, questions: editedQuestions });
-        onEditToggle();
+        setIsEditing(false);
       })
       .catch((e) => {
         console.error(e);
