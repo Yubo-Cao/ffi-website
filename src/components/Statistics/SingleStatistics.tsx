@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 interface SingleStatisticsProps {
   value: number;
@@ -9,7 +9,11 @@ interface SingleStatisticsProps {
   suffix?: string;
 }
 
-const SingleStatistics: React.FC<SingleStatisticsProps> = ({ value, label, suffix = "" }) => {
+const SingleStatistics: React.FC<SingleStatisticsProps> = ({
+  value,
+  label,
+  suffix = "",
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 

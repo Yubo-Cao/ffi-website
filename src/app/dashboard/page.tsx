@@ -1,15 +1,14 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
+import EnrolledCourses from "@/components/Dashboard/EnrolledCourses";
 import { NAME } from "@/lib/constants";
 import { Metadata } from "next";
-import EnrolledCourses from "@/components/Dashboard/EnrolledCourses";
 
 export const metadata: Metadata = {
   title: `Dashboard | ${NAME}`,
   description: "Learn about financial literacy and entrepreneurship.",
 };
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
   return (
     <>
       <Breadcrumb

@@ -1,30 +1,18 @@
 "use client";
 
+import ThemeToggler from "./ThemeToggler";
+import menuData from "./menuData";
+import { useAuth } from "@/components/Common/UserProvider";
 import { INTER, LOGO } from "@/lib/constants";
-import { app } from "@/lib/firebase";
-import { getAuth } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdFace, MdLogin } from "react-icons/md";
-import ThemeToggler from "./ThemeToggler";
-import menuData from "./menuData";
 
 const Header = () => {
-  // Login status
-  const auth = getAuth(app);
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setIsLogin(true);
-      } else {
-        setIsLogin(false);
-      }
-    });
-  }, [auth, setIsLogin]);
+  const { user } = useAuth();
+  const isLogin = user !== null;
 
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -79,7 +67,7 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="flex items-center justify-between w-full px-4">
+            <div className="flex w-full items-center justify-between px-4">
               <div className="hidden lg:block"></div>
               <div>
                 <button
@@ -114,7 +102,7 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="relative group">
+                      <li key={index} className="group relative">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -130,7 +118,7 @@ const Header = () => {
                           <>
                             <p
                               onClick={() => handleSubmenu(index)}
-                              className="flex items-center justify-between py-2 text-base cursor-pointer text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                              className="flex cursor-pointer items-center justify-between py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
                             >
                               {menuItem.title}
                               <span className="pl-3">
@@ -173,11 +161,13 @@ const Header = () => {
                 <div>
                   {isLogin ? (
                     <Link href="/dashboard">
-                      {auth.currentUser?.photoURL ? (
-                        <img
-                          src={auth.currentUser?.photoURL}
+                      {user.photoURL ? (
+                        <Image
+                          src={user.photoURL}
                           alt="profile"
-                          className="w-10 h-10 rounded-full"
+                          className="h-10 w-10 rounded-full"
+                          width={40}
+                          height={40}
                         />
                       ) : (
                         <MdFace className="text-2xl text-dark dark:text-white" />

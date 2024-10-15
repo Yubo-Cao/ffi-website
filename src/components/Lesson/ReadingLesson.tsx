@@ -1,33 +1,31 @@
-import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import dynamic from "next/dynamic";
+import { useEdit } from "@/components/Lesson/EditProvider";
 import { Lesson, ReadingLesson, setLesson as updateLesson } from "@/lib/course";
+import dynamic from "next/dynamic";
+import React, { useState } from "react";
 import { MdCheck } from "react-icons/md";
+import ReactMarkdown from "react-markdown";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 type MarkdownComponentProps = {
   content: string;
-  isEditing: boolean;
-  onEditToggle: () => void;
   lesson: ReadingLesson;
   setLesson: (lesson: Lesson) => void;
 };
 
 export default function ReadingComponent({
   content,
-  isEditing,
-  onEditToggle,
   lesson,
   setLesson,
 }: MarkdownComponentProps) {
   const [editedContent, setEditedContent] = useState(content);
+  const { isEditing, setIsEditing } = useEdit();
 
   const handleSave = () => {
     updateLesson({ ...lesson, content: editedContent })
       .then(() => {
         setLesson({ ...lesson, content: editedContent });
-        onEditToggle();
+        setIsEditing(false);
       })
       .catch((e) => {
         console.error(e);

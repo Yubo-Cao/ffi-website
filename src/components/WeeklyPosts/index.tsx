@@ -2,9 +2,9 @@
 
 import SectionTitle from "@/components/Common/SectionTitle";
 import { NAME } from "@/lib/constants";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 

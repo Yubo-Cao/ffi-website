@@ -1,10 +1,9 @@
-import Breadcrumb from "@/components/Common/Breadcrumb";
-
-import { Metadata } from "next";
-import { NAME } from "@/lib/constants";
-import Team from "@/components/Team";
 import Brands from "@/components/Brands";
+import Breadcrumb from "@/components/Common/Breadcrumb";
 import SectionTitle from "@/components/Common/SectionTitle";
+import Team from "@/components/Team";
+import { NAME } from "@/lib/constants";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `About | ${NAME}`,
@@ -34,10 +33,7 @@ const AboutPage = () => {
         </div>
       </section>
       <Team />
-      <section
-        id="sponsors"
-        className="pb-16 md:py-20 lg:py-28"
-      >
+      <section id="sponsors" className="pb-16 md:py-20 lg:py-28">
         <div className="container">
           <SectionTitle
             title={"Sponsors"}

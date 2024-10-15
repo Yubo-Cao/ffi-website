@@ -1,6 +1,6 @@
+import Brands from "@/components/Brands";
 import SectionTitle from "@/components/Common/SectionTitle";
 import { NAME } from "@/lib/constants";
-import Brands from "@/components/Brands";
 
 export const HomeSectionSponsors = () => {
   return (

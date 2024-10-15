@@ -1,9 +1,8 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
-import { Metadata } from "next";
-import { NAME } from "@/lib/constants";
 import Opportunities from "@/components/Opportunities";
 import WeeklyPosts from "@/components/WeeklyPosts";
+import { NAME } from "@/lib/constants";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `Actions | ${NAME}`,

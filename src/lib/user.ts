@@ -1,5 +1,5 @@
-import { collection, doc, getDoc, setDoc } from "@firebase/firestore";
 import { app, db } from "@/lib/firebase";
+import { collection, doc, getDoc, setDoc } from "@firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 export interface User {
@@ -32,7 +32,7 @@ export const createUser = async (
     email,
     password,
   );
-  const userRef = await setDoc(doc(USER_COL, user.user.uid), {
+  await setDoc(doc(USER_COL, user.user.uid), {
     email: user.user.email,
     badges: [],
     lastLogin: new Date(),

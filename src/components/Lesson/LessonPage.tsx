@@ -1,21 +1,17 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import {
-  getLearningProgress,
-  getLesson,
-  getUnit,
-  LearningProgress,
-  Lesson,
-  Unit,
-} from "@/lib/course";
-import { isAdmin as checkIsAdmin } from "@/lib/user";
-import ReadingLesson from "@/components/Lesson/ReadingLesson";
+import Loader from "@/components/Common/Loader";
+import { LessonNavigate } from "@/components/Lesson/LessonNavigate";
+import LessonSidebar from "@/components/Lesson/LessonSidebar";
 import QuizLesson from "@/components/Lesson/QuizLesson";
-import { MdChevronLeft, MdChevronRight, MdEdit, MdError } from "react-icons/md";
+import ReadingLesson from "@/components/Lesson/ReadingLesson";
+import { useUnit } from "@/components/Lesson/UnitProvider";
+import { getLesson, Lesson } from "@/lib/course";
 import Link from "next/link";
+import { useEffect } from "react";
+import { MdError } from "react-icons/md";
+import useSWR from "swr";
 
 export type LessonPageProps = {
   params: {
@@ -26,92 +22,30 @@ export type LessonPageProps = {
 };
 
 export default function LessonPage({ params }: LessonPageProps) {
-  const lessonId = params.lessonId;
-  const [lesson, setLesson] = useState<Lesson>(null);
-  const [unit, setUnit] = useState<Unit>(null);
-  const [learningProgress, setLearningProgress] =
-    useState<LearningProgress>(null);
-  const [status, setStatus] = useState({
-    lesson: "loading",
-    unit: "loading",
-    learningProgress: "loading",
-  });
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const auth = getAuth();
+  const { unit, error: unitError, isLoading: isUnitLoading } = useUnit();
+  const {
+    data: lesson,
+    isLoading: isLessonLoading,
+    error: lessonError,
+    mutate: setLesson,
+  } = useSWR<Lesson>(
+    `/lessons/${params.lessonId}`,
+    async () => await getLesson(params.lessonId),
+  );
 
-  // Ensure user is in sync with auth
   useEffect(() => {
-    return auth.onAuthStateChanged((user) => {
-      setUser(user);
-      if (user) {
-        checkIsAdmin(user.uid).then((admin) => {
-          setIsAdmin(admin);
-        });
-      }
-    });
-  }, []);
-  // Fetch lesson, unit, and learning progress
-  useEffect(() => {
-    getLesson(lessonId)
-      .then((l) => {
-        setLesson(l);
-        setStatus((prevStatus) => ({ ...prevStatus, lesson: "success" }));
-        return getUnit(params.unitId);
-      })
-      .then((u) => {
-        setUnit(u);
-        setStatus((prevStatus) => ({ ...prevStatus, unit: "success" }));
-      })
-      .catch((e) => {
-        setStatus((prevStatus) => ({
-          ...prevStatus,
-          lesson: "error",
-          unit: "error",
-        }));
-        console.error(e);
-      });
-
-    if (user) {
-      getLearningProgress(user.uid)
-        .then((progress) => {
-          const lessonProgress = progress.find(
-            (lp) => lp.lessonId === lessonId,
-          );
-          setLearningProgress(lessonProgress);
-          setStatus((prevStatus) => ({
-            ...prevStatus,
-            learningProgress: "success",
-          }));
-        })
-        .catch((e) => {
-          setStatus((prevStatus) => ({
-            ...prevStatus,
-            learningProgress: "error",
-          }));
-          console.error(e);
-        });
-    }
-  }, [lessonId, user]);
-
-  const handleEditToggle = () => {
-    setIsEditing((prev) => !prev);
-  };
+    if (!isLessonLoading) document.title = `${lesson.title}`;
+  }, [lesson, isLessonLoading]);
 
   const header = (
     <Breadcrumb
-      pageName={`${status.lesson !== "error" ? lesson?.title || "<LOADING>" : "Error"}`}
+      pageName={`${lessonError != null ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title}`}
+      parentPageName={`${unitError != null ? "Error" : isUnitLoading ? "<LOADING>" : unit.title}`}
       description={""}
     />
   );
 
-  if (
-    status.lesson === "error" ||
-    status.unit === "error" ||
-    status.learningProgress === "error"
-  ) {
+  if (lessonError != null || unitError != null) {
     return (
       <div>
         {header}
@@ -133,115 +67,33 @@ export default function LessonPage({ params }: LessonPageProps) {
     );
   }
 
-  const sidebar = unit && (
-    <>
-      <div
-        className={`transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "w-72" : "w-12"
-        } relative hidden border-r-2 border-primary p-6 pt-[120px] sm:pt-[180px] lg:pt-[206px] 2xl:block`}
-      >
-        <div
-          className="absolute -right-6 top-1/2 -translate-y-1/2 transform cursor-pointer rounded-full bg-gray-200 p-2 hover:bg-opacity-80 dark:bg-gray-700"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
-          {isSidebarOpen ? (
-            <MdChevronLeft size={24} />
-          ) : (
-            <MdChevronRight size={24} />
-          )}
-        </div>
-        {isSidebarOpen && (
-          <div className="overflow-clip">
-            <div className="w-72">
-              <h2 className="mb-4 text-2xl font-semibold text-primary">
-                Lessons in this Unit
-              </h2>
-              <ul>
-                {unit.lessons.map((lessonItem) => (
-                  <li key={lessonItem.id} className="mb-2">
-                    <Link
-                      href={`/courses/${params.courseId}/${params.unitId}/${lessonItem.id}`}
-                      className={`hover:underline ${lessonItem.id === lessonId ? "font-bold" : ""}`}
-                    >
-                      {lessonItem.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
-
   return (
     <>
       <div className="flex flex-col lg:flex-row">
-        {sidebar}
+        <LessonSidebar
+          courseId={params.courseId}
+          unitId={params.unitId}
+          lessonId={params.lessonId}
+        />
         <div className="flex-grow">
           {header}
           <div className="container my-16">
-            {/* NOTE: Currently only reading and quiz lesson */}
-            {lesson?.type === "reading" ? (
+            {isLessonLoading ? (
+              <Loader size={12} />
+            ) : lesson.type === "reading" ? (
               <ReadingLesson
                 content={lesson.content}
-                isEditing={isEditing}
-                onEditToggle={handleEditToggle}
                 lesson={lesson}
                 setLesson={setLesson}
               />
             ) : (
-              <QuizLesson
-                lesson={lesson}
-                isEditing={isEditing}
-                onEditToggle={handleEditToggle}
-                setLesson={setLesson}
-              />
+              <QuizLesson lesson={lesson} setLesson={setLesson} />
             )}
-            {learningProgress && (
-              <div className="progress mt-8">
-                <p>Status: {learningProgress.progress}</p>
-              </div>
-            )}
-            {isAdmin && (
-              <div className="fixed bottom-24 right-24 z-[100]">
-                <button
-                  onClick={handleEditToggle}
-                  aria-label="edit lesson"
-                  className="flex size-16 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp disabled:cursor-not-allowed disabled:bg-gray-300"
-                  disabled={isEditing || !lesson}
-                >
-                  <span className="text-lg text-white">
-                    <MdEdit className="size-8" />
-                  </span>
-                </button>
-              </div>
-            )}
-
-            <div className="mt-16 flex justify-between">
-              {unit && lesson && unit.lessons && unit.lessons.length > 0 && (
-                <>
-                  {unit.lessons.findIndex((l) => l.id === lesson.id) > 0 && (
-                    <Link
-                      href={`/courses/${params.courseId}/${params.unitId}/${unit.lessons[unit.lessons.findIndex((l) => l.id === lesson.id) - 1].id}`}
-                      className="rounded-md bg-primary px-4 py-2 text-white"
-                    >
-                      Previous Lesson
-                    </Link>
-                  )}
-                  {unit.lessons.findIndex((l) => l.id === lesson.id) <
-                    unit.lessons.length - 1 && (
-                    <Link
-                      href={`/courses/${params.courseId}/${params.unitId}/${unit.lessons[unit.lessons.findIndex((l) => l.id === lesson.id) + 1].id}`}
-                      className="rounded-md bg-primary px-4 py-2 text-white"
-                    >
-                      Next Lesson
-                    </Link>
-                  )}
-                </>
-              )}
-            </div>
+            <LessonNavigate
+              lesson={lesson}
+              courseId={params.courseId}
+              unitId={params.unitId}
+            />
           </div>
         </div>
       </div>

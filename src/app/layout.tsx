@@ -1,9 +1,9 @@
+import "../styles/index.css";
+import { Providers } from "./providers";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
-import { RUFINA } from "@/lib/constants";
-import "../styles/index.css";
-import { Providers } from "./providers";
+import { NAME, RUFINA } from "@/lib/constants";
 
 export default function RootLayout({
   children,
@@ -35,6 +35,7 @@ export default function RootLayout({
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f8fafc" />
         <meta name="msapplication-TileColor" content="#f8fafc" />
         <meta name="theme-color" content="#f8fafc" />
+        <title>{NAME}</title>
       </head>
 
       <body className={`bg-[#FCFCFC] dark:bg-black ${RUFINA.className}`}>
