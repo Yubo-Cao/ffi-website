@@ -73,10 +73,10 @@ const Hero = () => {
             >
               <motion.div variants={itemVariants}>
                 <Link
-                  href={"#"}
+                  href={"/login"}
                   className="px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
                 >
-                  Get Involved
+                  Start Learning
                 </Link>
               </motion.div>
               <motion.div variants={itemVariants}>

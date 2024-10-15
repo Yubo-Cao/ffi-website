@@ -6,12 +6,11 @@ import {
   getDocs,
   orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "@firebase/firestore";
-import { app, db } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { db } from "@/lib/firebase";
+import { User, USER_COL } from "@/lib/user";
 
 export interface Course {
   /**
@@ -107,21 +106,6 @@ export interface Question {
   answer: string;
 }
 
-export interface User {
-  /**
-   * The id of the user.
-   */
-  id: string;
-  /**
-   * The email of the user.
-   */
-  email: string;
-  /**
-   * The name of the user.
-   */
-  name: string;
-}
-
 export interface Enrollment {
   /**
    * The id of the enrollment.
@@ -171,7 +155,6 @@ export interface LearningProgress {
 const COURSE_COL = collection(db, "courses");
 const UNIT_COL = collection(db, "units");
 const LESSON_COL = collection(db, "lessons");
-const USER_COL = collection(db, "users");
 const ENROLLMENT_COL = collection(db, "enrollments");
 const LEARNING_PROGRESS_COL = collection(db, "learningProgress");
 
@@ -373,26 +356,4 @@ export const setLesson = async (updatedLesson: Lesson): Promise<void> => {
       questions: (updatedLesson as QuizLesson).questions,
     }),
   });
-};
-
-export const createUser = async (
-  email: string,
-  password: string,
-): Promise<User> => {
-  const user = await createUserWithEmailAndPassword(
-    getAuth(app),
-    email,
-    password,
-  );
-  const userRef = await setDoc(doc(USER_COL, user.user.uid), {
-    email: user.user.email,
-    badges: [],
-    lastLogin: new Date(),
-    name: user.user.displayName,
-  });
-  return {
-    id: user.user.uid,
-    email: user.user.email,
-    name: user.user.displayName,
-  };
 };

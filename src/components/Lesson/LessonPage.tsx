@@ -11,6 +11,7 @@ import {
   Lesson,
   Unit,
 } from "@/lib/course";
+import { isAdmin as checkIsAdmin } from "@/lib/user";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import QuizLesson from "@/components/Lesson/QuizLesson";
 import { MdChevronLeft, MdChevronRight, MdEdit, MdError } from "react-icons/md";
@@ -46,8 +47,9 @@ export default function LessonPage({ params }: LessonPageProps) {
     return auth.onAuthStateChanged((user) => {
       setUser(user);
       if (user) {
-        // TODO: Implement true admin check
-        setIsAdmin(user.email === "cao2006721@gmail.com");
+        checkIsAdmin(user.uid).then((admin) => {
+          setIsAdmin(admin);
+        });
       }
     });
   }, []);

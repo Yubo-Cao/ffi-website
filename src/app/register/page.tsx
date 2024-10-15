@@ -4,7 +4,8 @@ import { NAME } from "@/lib/constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { createUser } from "@/lib/course";
+
+import { createUser } from "@/lib/user";
 
 export default function Register() {
   const [email, setEmail] = useState("");

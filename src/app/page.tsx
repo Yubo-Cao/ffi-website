@@ -18,9 +18,9 @@ export default function Home() {
     <>
       <ScrollUp />
       <Hero />
-      <Opportunities />
+      {/*<Opportunities />*/}
       <Statistics />
-      <HomeSectionScholarship />
+      {/*<HomeSectionScholarship />*/}
       <HomeSectionSponsors />
     </>
   );
