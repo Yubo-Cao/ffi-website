@@ -5,41 +5,42 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    font-family: "Rufina", serif;
-  }
+    body {
+        /* Note: Cormorant Garamond is loaded through Google Fonts */
+        font-family: "Cormorant Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
 
-  :root {
-    --color-bg: 248 250 252;
-    --color-primary: 54 82 195;
-    --color-text: 51 65 85;
-  }
+    :root {
+        --color-bg: 248 250 252;
+        --color-primary: 54 82 195;
+        --color-text: 51 65 85;
+    }
 
-  :root[class~="dark"] {
-    --color-bg: 51 65 85;
-    --color-primary: 104 142 255;
-    --color-text: 203 213 225;
-  }
+    :root[class~="dark"] {
+        --color-bg: 51 65 85;
+        --color-primary: 104 142 255;
+        --color-text: 203 213 225;
+    }
 }
 
 @layer components {
-  input[type="checkbox"]:checked ~ label span svg {
-    @apply inline-flex;
-  }
+    input[type="checkbox"]:checked ~ label span svg {
+        @apply inline-flex;
+    }
 
-  .sticky .header-logo {
-    @apply py-5 lg:py-2;
-  }
+    .sticky .header-logo {
+        @apply py-5 lg:py-2;
+    }
 
-  .sticky .menu-scroll.active {
-    @apply opacity-70;
-  }
+    .sticky .menu-scroll.active {
+        @apply opacity-70;
+    }
 
-  input#togglePlan:checked ~ .dot {
-    @apply translate-x-full;
-  }
+    input#togglePlan:checked ~ .dot {
+        @apply translate-x-full;
+    }
 
-  input#checkboxLabel:checked ~ .box span {
-    @apply opacity-100;
-  }
+    input#checkboxLabel:checked ~ .box span {
+        @apply opacity-100;
+    }
 }

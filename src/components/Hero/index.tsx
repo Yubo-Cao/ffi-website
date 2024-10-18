@@ -1,6 +1,6 @@
 "use client";
 
-import { NAME } from "@/lib/constants";
+import { LOGO, NAME } from "@/lib/constants";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -95,7 +95,7 @@ const Hero = () => {
           >
             <div className="relative p-12 -my-8 rounded-full aspect-square xl:mb-0">
               <Image
-                src="/logo.png"
+                src={LOGO}
                 alt={NAME}
                 width={196}
                 height={196}

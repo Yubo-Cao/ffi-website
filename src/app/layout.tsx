@@ -3,7 +3,7 @@ import { Providers } from "./providers";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
-import { NAME, RUFINA } from "@/lib/constants";
+import { NAME, FONT } from "@/lib/constants";
 
 export default function RootLayout({
   children,
@@ -15,30 +15,23 @@ export default function RootLayout({
       {/* ref: https://realfavicongenerator.net */}
       <head>
         <link
+          rel="icon"
+          type="image/png"
+          href="/favicon-48x48.png"
+          sizes="48x48"
+        />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link
           rel="apple-touch-icon"
-          sizes="120x120"
+          sizes="180x180"
           href="/apple-touch-icon.png"
         />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f8fafc" />
-        <meta name="msapplication-TileColor" content="#f8fafc" />
-        <meta name="theme-color" content="#f8fafc" />
         <title>{NAME}</title>
       </head>
 
-      <body className={`bg-[#FCFCFC] dark:bg-black ${RUFINA.className}`}>
+      <body className={`bg-[#FCFCFC] dark:bg-black ${FONT.className}`}>
         <Providers>
           <Header />
           {children}
