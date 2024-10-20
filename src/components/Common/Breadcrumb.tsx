@@ -5,15 +5,23 @@ const Breadcrumb = ({
   parentPageName = "Home",
   parentPageLink = "/",
   description,
+  onSubmit,
+  isEditing = false,
+  className = "",
 }: {
   pageName: string;
   parentPageName?: string;
   parentPageLink?: string;
   description: string;
+  onSubmit?: (arg: { name: string; description: string }) => void;
+  isEditing?: boolean;
+  className?: string;
 }) => {
   return (
     <>
-      <section className="relative z-10 overflow-hidden pt-[120px] sm:pt-[180px] lg:pt-[206px]">
+      <section
+        className={`relative z-10 pt-[120px] sm:pt-[180px] lg:pt-[206px] ${className}`}
+      >
         <div className="container">
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">
@@ -27,13 +35,26 @@ const Breadcrumb = ({
                     {pageName}
                   </h1>
                 ) : (
-                  <div className="mb-5 h-8 w-1/2 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
+                  <h1 className="mb-5 h-8 w-1/2 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></h1>
                 )}
                 {description !== "<LOADING>" ? (
-                  description && (
-                    <p className="text-base font-medium leading-relaxed text-body-color">
-                      {description}
-                    </p>
+                  isEditing ? (
+                    <textarea
+                      defaultValue={description}
+                      onBlur={(e) =>
+                        onSubmit({
+                          name: pageName,
+                          description: e.target.value,
+                        })
+                      }
+                      className={`w-full h-24 p-4 text-base font-medium leading-relaxed text-body-color rounded-md`}
+                    />
+                  ) : (
+                    description && (
+                      <p className="text-base font-medium leading-relaxed text-body-color">
+                        {description}
+                      </p>
+                    )
                   )
                 ) : (
                   <div className="h-4 w-full animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
@@ -57,9 +78,19 @@ const Breadcrumb = ({
                     <span className="mr-3 block h-2 w-2 rotate-45 border-r-2 border-t-2 border-body-color"></span>
                   </li>
                   {pageName !== "<LOADING>" ? (
-                    <li className="text-base font-medium text-primary">
-                      {pageName}
-                    </li>
+                    isEditing ? (
+                      <input
+                        type="text"
+                        defaultValue={pageName}
+                        onBlur={(e) =>
+                          onSubmit({ name: e.target.value, description })
+                        }
+                      />
+                    ) : (
+                      <li className="text-base font-medium text-primary">
+                        {pageName}
+                      </li>
+                    )
                   ) : (
                     <li className="ml-3 h-6 w-20 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></li>
                   )}

@@ -3,6 +3,7 @@ import { User, USER_COL } from "@/lib/user";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -159,6 +160,12 @@ const LESSON_COL = collection(db, "lessons");
 const ENROLLMENT_COL = collection(db, "enrollments");
 const LEARNING_PROGRESS_COL = collection(db, "learningProgress");
 
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export function checkId(id: string): boolean {
+  return /^[a-z][a-z0-9-]*$/.test(id);
+}
+
 export async function getCourse(courseId: string): Promise<Course> {
   const course = await getDoc(doc(COURSE_COL, courseId));
   if (!course.exists()) {
@@ -253,14 +260,17 @@ export async function getUnit(unitId: string): Promise<Unit> {
   };
 }
 
-export async function addUnit(courseId: string, unit: Unit): Promise<Unit> {
+export async function addUnit(
+  courseId: string,
+  unit: Optional<Unit, "id">,
+): Promise<Unit> {
   if (unit.id) {
     const { id, ...unitWithoutId } = unit;
     await setDoc(doc(UNIT_COL, unit.id), {
       ...unitWithoutId,
       course: doc(COURSE_COL, courseId),
     });
-    return unit;
+    return unit as Unit;
   }
   const unitRef = await addDoc(UNIT_COL, {
     ...unit,
@@ -272,18 +282,17 @@ export async function addUnit(courseId: string, unit: Unit): Promise<Unit> {
   } as Unit;
 }
 
-export async function addLesson(
-  unitId: string,
-  lesson: Omit<Lesson, "id">,
-): Promise<Lesson> {
-  const lessonRef = await addDoc(LESSON_COL, {
-    ...lesson,
-    unit: doc(UNIT_COL, unitId),
+export async function removeUnit(unitId: string): Promise<void> {
+  await deleteDoc(doc(UNIT_COL, unitId));
+}
+
+export async function setUnit(updatedUnit: Unit): Promise<void> {
+  const unitRef = doc(UNIT_COL, updatedUnit.id);
+  await updateDoc(unitRef, {
+    title: updatedUnit.title,
+    description: updatedUnit.description,
+    precedence: updatedUnit.precedence,
   });
-  return {
-    id: lessonRef.id,
-    ...lesson,
-  } as Lesson;
 }
 
 export async function removeLesson(lessonId: string): Promise<void> {
@@ -386,6 +395,28 @@ export async function getLesson(lessonId: string): Promise<Lesson> {
     }),
   } as Lesson;
 }
+
+export const addLesson = async (
+  unitId: Unit["id"],
+  lesson: Optional<Lesson, "id">,
+): Promise<Lesson> => {
+  if (lesson.id) {
+    const { id, ...lessonWithoutId } = lesson;
+    await setDoc(doc(LESSON_COL, lesson.id), {
+      ...lessonWithoutId,
+      unit: doc(UNIT_COL, unitId),
+    });
+    return lesson as Lesson;
+  }
+  const lessonRef = await addDoc(LESSON_COL, {
+    ...lesson,
+    unit: doc(UNIT_COL, unitId),
+  });
+  return {
+    id: lessonRef.id,
+    ...lesson,
+  } as Lesson;
+};
 
 export const setLesson = async (updatedLesson: Lesson): Promise<void> => {
   const lessonRef = doc(LESSON_COL, updatedLesson.id);

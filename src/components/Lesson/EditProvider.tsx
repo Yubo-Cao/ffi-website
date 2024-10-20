@@ -22,7 +22,6 @@ const EditProvider = ({ children }) => {
             onClick={() => setIsEditing((prev) => !prev)}
             aria-label="edit lesson"
             className="flex size-16 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp disabled:cursor-not-allowed disabled:bg-gray-300"
-            disabled={isEditing}
           >
             <div className="text-lg text-white">
               <MdEdit className="size-8" />

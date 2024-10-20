@@ -4,6 +4,10 @@ import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { MdCheck } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
+import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -46,8 +50,13 @@ export default function ReadingComponent({
           </button>
         </>
       ) : (
-        <div className="prose lg:prose-lg">
-          <ReactMarkdown>{content}</ReactMarkdown>
+        <div className="prose dark:prose-invert">
+          <ReactMarkdown
+            rehypePlugins={[rehypeKatex, rehypeRaw]}
+            remarkPlugins={[remarkGfm, remarkMath]}
+          >
+            {content}
+          </ReactMarkdown>
         </div>
       )}
     </div>

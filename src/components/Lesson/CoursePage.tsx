@@ -3,10 +3,17 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useCourse } from "@/components/Lesson/CourseProvider";
 import { useEdit } from "@/components/Lesson/EditProvider";
-import { addUnit, Course, LearningProgress, Unit } from "@/lib/course";
+import {
+  addUnit,
+  checkId,
+  Course,
+  LearningProgress,
+  removeUnit,
+  Unit,
+} from "@/lib/course";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { MdAdd, MdError } from "react-icons/md";
+import { MdAdd, MdDelete, MdError } from "react-icons/md";
 
 export type CoursePageProps = {
   params: {
@@ -14,42 +21,62 @@ export type CoursePageProps = {
   };
 };
 
-function SingleUnit(props: {
+function SingleUnit({
+  idx,
+  course,
+  unit,
+  learningProgress,
+  isEditing,
+  deleteUnit,
+}: {
   idx: number;
   course: Course;
   unit: Unit;
   learningProgress?: LearningProgress[];
-  isEditing?: boolean;
+  isEditing: boolean;
+  deleteUnit: (unitId: string) => void;
 }) {
-  return (
-    <Link href={`/courses/${props.course.id}/${props.unit.id}`}>
-      <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 size-full">
-        <h2 className="mb-2 text-lg font-semibold text-body-color">
-          <span className="text-xl text-black dark:text-white">
-            Unit {props.idx + 1}.
-          </span>{" "}
-          {props.unit.title}
-        </h2>
-        <ul className="flex flex-row gap-2">
-          {props.unit.lessons.map((lesson) => (
-            <div
-              key={lesson.id}
-              className={`size-8 rounded-md ${
-                {
-                  "Not Started": "bg-gray-200 dark:bg-gray-700",
-                  "In Progress": "bg-yellow-300 dark:bg-yellow-500",
-                  Completed: "bg-primary",
-                }[
-                  props.learningProgress?.find(
-                    (lp) => lp.lessonId === lesson.id,
-                  )?.progress
-                ] || "bg-gray-200 dark:bg-gray-700"
-              }`}
-            ></div>
-          ))}
-        </ul>
-      </li>
-    </Link>
+  const content = (
+    <li className="max-w-xl rounded-lg bg-gray-100 p-4 dark:bg-gray-800 size-full relative">
+      <h2 className="mb-2 text-lg font-semibold text-body-color">
+        <span className="text-xl text-black dark:text-white">
+          Unit {idx + 1}.
+        </span>{" "}
+        {unit.title}
+      </h2>
+      <ul className="flex flex-row gap-2">
+        {unit.lessons.map((lesson) => (
+          <div
+            key={lesson.id}
+            className={`size-8 rounded-md ${
+              {
+                "Not Started": "bg-gray-200 dark:bg-gray-700",
+                "In Progress": "bg-yellow-300 dark:bg-yellow-500",
+                Completed: "bg-primary",
+              }[
+                learningProgress?.find((lp) => lp.lessonId === lesson.id)
+                  ?.progress
+              ] || "bg-gray-200 dark:bg-gray-700"
+            }`}
+          ></div>
+        ))}
+      </ul>
+      {isEditing && (
+        <div className="absolute top-4 right-4">
+          <MdDelete
+            className="size-6 bg-gray-200 rounded-full p-1 text-red-500 dark:text-red-400 cursor-pointer"
+            onClick={() => {
+              deleteUnit(unit.id);
+            }}
+          />
+        </div>
+      )}
+    </li>
+  );
+  return isEditing ? (
+    content
+  ) : (
+    <Link href={`/courses/${course.id}/${unit.id}`}>{content}</Link>
   );
 }
 
@@ -65,15 +92,21 @@ function NewUnit({
 
   return (
     <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 flex-1 relative">
-      {/* id */}
       <div className="mb-2 text-sm font-mono text-body-color">
         <span className="text-black dark:text-white">ID: </span>
         <input
           type="text"
           placeholder="Unit ID"
           value={id}
-          onChange={(e) => setId(e.target.value)}
+          onChange={(e) =>
+            checkId(e.target.value) &&
+            !course.units
+              .map((el) => el.id === e.target.value)
+              .reduce((a, b) => a || b, false) &&
+            setId(e.target.value)
+          }
           className="inline-block h-8 p-2"
+          pattern={"[a-z][a-z0-9]+"}
         />
       </div>
       <div className="mb-2 text-lg font-semibold text-body-color">
@@ -115,11 +148,19 @@ function NewUnit({
 }
 
 export default function CoursePage() {
-  const { course, error, isLoading } = useCourse();
+  const { course, error, isLoading, setCourse } = useCourse();
   const { isEditing, setIsEditing } = useEdit();
-  const onSubmit = useCallback(async (unit: Unit) => {
+
+  const onAddUnit = useCallback(async (unit: Unit) => {
     await addUnit(course.id, unit);
     course.units.push(unit);
+    setCourse(course);
+    setIsEditing(false);
+  }, []);
+  const deleteUnit = useCallback(async (unitId: string) => {
+    course.units = course.units.filter((unit) => unit.id !== unitId);
+    await removeUnit(unitId);
+    setCourse(course);
     setIsEditing(false);
   }, []);
 
@@ -167,9 +208,16 @@ export default function CoursePage() {
         <ol className="grid grid-cols-[repeat(auto-fit,minmax(384px,448px))] gap-4">
           {course &&
             course.units.map((unit, idx) => (
-              <SingleUnit key={unit.id} idx={idx} course={course} unit={unit} />
+              <SingleUnit
+                key={unit.id}
+                idx={idx}
+                course={course}
+                unit={unit}
+                isEditing={isEditing}
+                deleteUnit={deleteUnit}
+              />
             ))}
-          {isEditing && <NewUnit course={course} onSubmit={onSubmit} />}
+          {isEditing && <NewUnit course={course} onSubmit={onAddUnit} />}
         </ol>
       </div>
     </div>

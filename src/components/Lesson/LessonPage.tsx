@@ -41,7 +41,9 @@ export default function LessonPage({ params }: LessonPageProps) {
     <Breadcrumb
       pageName={`${lessonError != null ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title}`}
       parentPageName={`${unitError != null ? "Error" : isUnitLoading ? "<LOADING>" : unit.title}`}
+      parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
       description={""}
+      className={`!static`}
     />
   );
 
@@ -75,7 +77,7 @@ export default function LessonPage({ params }: LessonPageProps) {
           unitId={params.unitId}
           lessonId={params.lessonId}
         />
-        <div className="flex-grow">
+        <div className="flex-grow relative pl-12">
           {header}
           <div className="container my-16">
             {isLessonLoading ? (

@@ -4,7 +4,7 @@ import { NAME } from "@/lib/constants";
 
 export const HomeSectionSponsors = () => {
   return (
-    <section id="sponsors" className="pb-16 md:py-20 lg:py-28">
+    <section id="sponsors" className="pb-16 md:py-20 lg:py-28 bg-bg-color">
       <div className="container">
         <SectionTitle
           title={"Sponsors"}

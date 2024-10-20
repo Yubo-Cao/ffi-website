@@ -1,11 +1,11 @@
 import ScrollUp from "@/components/Common/ScrollUp";
 import Hero from "@/components/Hero";
-import HomeSectionScholarship from "@/components/Home/HomeSectionScholarship";
+import { MorningBrew } from "@/components/Home/HomeSectionMorningBrew";
 import HomeSectionSponsors from "@/components/Home/HomeSectionSponsors";
-import Opportunities from "@/components/Opportunities";
 import Statistics from "@/components/Statistics";
 import { DESCRIPTION, NAME } from "@/lib/constants";
 import { Metadata } from "next";
+import React from "react";
 
 export const metadata: Metadata = {
   title: NAME,
@@ -20,6 +20,7 @@ export default function Home() {
       {/*<Opportunities />*/}
       <Statistics />
       {/*<HomeSectionScholarship />*/}
+      <MorningBrew />
       <HomeSectionSponsors />
     </>
   );
