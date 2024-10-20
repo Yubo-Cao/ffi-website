@@ -77,7 +77,7 @@ export default function LessonPage({ params }: LessonPageProps) {
           unitId={params.unitId}
           lessonId={params.lessonId}
         />
-        <div className="flex-grow relative pl-12">
+        <div className="flex-grow relative 2xl:pl-12">
           {header}
           <div className="container my-16">
             {isLessonLoading ? (
