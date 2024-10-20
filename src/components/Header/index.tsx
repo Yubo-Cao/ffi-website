@@ -184,6 +184,18 @@ const Header = () => {
           </div>
         </div>
       </header>
+      <style jsx>{`
+        .header {
+          border-image: linear-gradient(
+              90deg,
+              #688eff 33.3%,
+              rgba(54, 82, 195, 1) 33.33%,
+              rgba(54, 82, 195, 1) 66.6%,
+              #688eff 66.66%
+            )
+            0 0 1 / 4px 0;
+        }
+      `}</style>
     </>
   );
 };

@@ -53,7 +53,7 @@ function SingleUnit(props: {
   );
 }
 
-export default function CoursePage({ params }: CoursePageProps) {
+export default function CoursePage() {
   const { course, error, isLoading } = useCourse();
   const { isEditing, setIsEditing } = useEdit();
   const [learningProgress, setLearningProgress] = useState(null);
