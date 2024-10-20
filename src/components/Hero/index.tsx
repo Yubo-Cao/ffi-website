@@ -4,6 +4,7 @@ import { LOGO, NAME } from "@/lib/constants";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback } from "react";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -35,6 +36,12 @@ const imageVariants = {
 };
 
 const Hero = () => {
+  const scrollDown = useCallback(() => {
+    document.getElementById("statistics").scrollIntoView({
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <motion.section
       id="home"
@@ -80,12 +87,12 @@ const Hero = () => {
                 </Link>
               </motion.div>
               <motion.div variants={itemVariants}>
-                <Link
-                  href={"#"}
+                <button
+                  onClick={scrollDown}
                   className="px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
                 >
                   Learn More
-                </Link>
+                </button>
               </motion.div>
             </motion.div>
           </motion.div>

@@ -21,7 +21,7 @@ const opportunitiesData: Feature[] = [
     ),
     title: "Guest Speaker Series",
     paragraph:
-      "Invite prominent leaders from the finance industry to engage with members through virtual sessions. These events provide unique insights into real-world finance topics and allow participants to interact with experts.",
+      "We invite prominent leaders from the finance industry to engage with members through virtual sessions. These events provide unique insights into real-world finance topics and allow participants to interact with experts.",
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ const opportunitiesData: Feature[] = [
     ),
     title: "Start-up Competitions",
     paragraph:
-      "Collaborate with national companies to challenge members to solve pressing issues in finance. The competition is open for submissions over a few weeks, with winners receiving scholarships, cash prizes, and national recognition.",
+      "We collaborate with national companies to challenge members to solve pressing issues in finance. The competition is open for submissions over a few weeks, with winners receiving scholarships, cash prizes, and national recognition.",
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ const opportunitiesData: Feature[] = [
     ),
     title: "Financial Literacy program",
     paragraph:
-      "Address the lack of financial education by offering an interactive platform for underserved communities. Teams of volunteers will be recruited to deliver hands-on workshops, empowering teenagers to make informed financial decisions.",
+      "We address the lack of financial education by offering an interactive platform for underserved communities. Teams of volunteers will be recruited to deliver hands-on workshops, empowering teenagers to make informed financial decisions.",
   },
 ];
 export default opportunitiesData;

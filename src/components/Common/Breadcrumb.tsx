@@ -3,10 +3,12 @@ import Link from "next/link";
 const Breadcrumb = ({
   pageName,
   parentPageName = "Home",
+  parentPageLink = "/",
   description,
 }: {
   pageName: string;
   parentPageName?: string;
+  parentPageLink?: string;
   description: string;
 }) => {
   return (
@@ -43,7 +45,7 @@ const Breadcrumb = ({
                 <ul className="flex items-center md:justify-end">
                   <li className="flex items-center">
                     <Link
-                      href="/"
+                      href={parentPageLink}
                       className="pr-1 text-base font-medium text-body-color hover:text-primary"
                     >
                       {parentPageName !== "<LOADING>" ? (

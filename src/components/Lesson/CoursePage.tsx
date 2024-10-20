@@ -1,16 +1,11 @@
 "use client";
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import { useAuth } from "@/components/Common/UserProvider";
-import {
-  Course,
-  getCourse,
-  getLearningProgress,
-  LearningProgress,
-  Unit,
-} from "@/lib/course";
+import { useCourse } from "@/components/Lesson/CourseProvider";
+import { useEdit } from "@/components/Lesson/EditProvider";
+import { Course, LearningProgress, Unit } from "@/lib/course";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdError } from "react-icons/md";
 
 export type CoursePageProps = {
@@ -24,10 +19,11 @@ function SingleUnit(props: {
   course: Course;
   unit: Unit;
   learningProgress?: LearningProgress[];
+  isEditing?: boolean;
 }) {
   return (
     <Link href={`/courses/${props.course.id}/${props.unit.id}`}>
-      <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+      <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 size-full">
         <h2 className="mb-2 text-lg font-semibold text-body-color">
           <span className="text-xl text-black dark:text-white">
             Unit {props.idx + 1}.
@@ -58,56 +54,26 @@ function SingleUnit(props: {
 }
 
 export default function CoursePage({ params }: CoursePageProps) {
-  const courseId = params.courseId;
-  const [course, setCourse] = useState<Course>(null);
-  const [status, setStatus] = useState({
-    course: "loading",
-    learningProgress: "loading",
-  });
-  const { user } = useAuth();
+  const { course, error, isLoading } = useCourse();
+  const { isEditing, setIsEditing } = useEdit();
   const [learningProgress, setLearningProgress] = useState(null);
-
-  useEffect(() => {
-    let stat = { ...status };
-    getCourse(courseId)
-      .then((c) => {
-        setCourse(c);
-        stat.course = "success";
-        setStatus(stat);
-      })
-      .catch((e) => {
-        stat.course = "error";
-        setStatus(stat);
-        document.title = "Course not found";
-        console.error(e);
-      });
-    if (user) {
-      getLearningProgress(user.uid, courseId)
-        .then((progress) => {
-          setLearningProgress(progress);
-          stat.learningProgress = "success";
-          setStatus(stat);
-        })
-        .catch((e) => {
-          stat.learningProgress = "error";
-          setStatus(stat);
-          console.error(e);
-        });
-    }
-  }, [courseId, user, status]);
 
   const header = (
     <Breadcrumb
-      pageName={`${status["course"] !== "error" ? course?.title || "<LOADING>" : "Error"}`}
+      pageName={
+        error ? "Course not found" : isLoading ? "<LOADING>" : course.title
+      }
       description={
-        status["course"] !== "error"
-          ? course?.description || "<LOADING>"
-          : "Course not found"
+        error
+          ? "The course you are looking for does not exist"
+          : isLoading
+            ? "<LOADING>"
+            : course.description
       }
     />
   );
 
-  if (status["course"] == "error") {
+  if (error != null) {
     return (
       <div>
         {header}
@@ -134,7 +100,7 @@ export default function CoursePage({ params }: CoursePageProps) {
       {header}
 
       <div className="container my-16 mt-12 grid grid-flow-col-dense">
-        <ol>
+        <ol className="grid grid-cols-[repeat(auto-fit,minmax(384px,448px))] gap-4">
           {course &&
             course.units.map((unit, idx) => (
               <SingleUnit
@@ -145,6 +111,25 @@ export default function CoursePage({ params }: CoursePageProps) {
                 learningProgress={learningProgress}
               />
             ))}
+          {isEditing && (
+            <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 flex-1">
+              <div className="mb-2 text-lg font-semibold text-body-color">
+                <span className="text-xl text-black dark:text-white">
+                  Unit {course.units.length + 1}.
+                </span>{" "}
+                <input
+                  type="text"
+                  placeholder="Unit title"
+                  className="inline-block h-8 p-2"
+                />
+              </div>
+              <ul className="flex flex-row gap-2">
+                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+              </ul>
+            </li>
+          )}
         </ol>
       </div>
     </div>
