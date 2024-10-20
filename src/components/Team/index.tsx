@@ -35,7 +35,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
   operation: [
     {
       name: "Bella Brown",
-      role: "Head of Operations",
+      role: "Director of Operations",
     },
     {
       name: "William Chow",
@@ -49,7 +49,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
   marketing: [
     {
       name: "Vander Reeves",
-      role: "Head of Marketing/Outreach",
+      role: "Director of Marketing/Outreach",
     },
     {
       name: "Nisarg Parekh",
@@ -67,7 +67,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
   planning: [
     {
       name: "Daniel Neuner",
-      role: "Head of Strategic Marketing",
+      role: "Director of Strategic Planning",
     },
   ],
   regionals: [
@@ -87,12 +87,12 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
   development: [
     {
       name: "Yubo Cao",
-      role: "Head of Technology",
-      bio: "Yubo is a senior at Gwinnett School of Mathematics, Science, and Technology. He is passionate about CS and technology. He is the head of technology at the FFI and aims to make an impact on the community through technology, such as building FFI's website and creating platform to financial literacy education.",
+      role: "Director of Technology",
+      bio: "Yubo is a senior at Gwinnett School of Mathematics, Science, and Technology. He is passionate about CS and technology. He is the director of technology at the FFI and aims to make an impact on the community through technology, such as building FFI's website and creating platform to financial literacy education.",
     },
     {
       name: "Anish Rachakonda",
-      role: "Head of Technology",
+      role: "Director of Technology",
     },
   ],
 };

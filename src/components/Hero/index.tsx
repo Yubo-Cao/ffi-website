@@ -22,7 +22,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6 },
+    transition: { type: "spring", duration: 0.6 },
   },
 };
 
@@ -70,9 +70,9 @@ const Hero = () => {
               className="dark:text-body-color-dark mb-12 text-base !leading-relaxed text-body-color sm:text-lg md:text-xl"
               variants={itemVariants}
             >
-              Nonprofit financial education organization that provides free
-              financial education to help you make informed decisions about your
-              money.
+              We are a student-run nonprofit financial education organization
+              that provides free financial education to help young adults make
+              informed decisions about your money.
             </motion.p>
             <motion.div
               className="flex flex-wrap items-center gap-4 sm:flex-row"

@@ -3,10 +3,10 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useCourse } from "@/components/Lesson/CourseProvider";
 import { useEdit } from "@/components/Lesson/EditProvider";
-import { Course, LearningProgress, Unit } from "@/lib/course";
+import { addUnit, Course, LearningProgress, Unit } from "@/lib/course";
 import Link from "next/link";
-import { useState } from "react";
-import { MdError } from "react-icons/md";
+import { useCallback, useState } from "react";
+import { MdAdd, MdError } from "react-icons/md";
 
 export type CoursePageProps = {
   params: {
@@ -53,10 +53,75 @@ function SingleUnit(props: {
   );
 }
 
+function NewUnit({
+  course,
+  onSubmit,
+}: {
+  course: Course;
+  onSubmit: (unit: Unit) => void;
+}) {
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+
+  return (
+    <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 flex-1 relative">
+      {/* id */}
+      <div className="mb-2 text-sm font-mono text-body-color">
+        <span className="text-black dark:text-white">ID: </span>
+        <input
+          type="text"
+          placeholder="Unit ID"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+          className="inline-block h-8 p-2"
+        />
+      </div>
+      <div className="mb-2 text-lg font-semibold text-body-color">
+        <span className="text-xl text-black dark:text-white">
+          Unit {course.units.length + 1}.
+        </span>{" "}
+        <input
+          type="text"
+          placeholder="Unit title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="inline-block h-8 p-2"
+        />
+      </div>
+      <ul className="flex flex-row gap-2">
+        <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+        <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+        <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+      </ul>
+      <div className="absolute bottom-4 right-4">
+        <MdAdd
+          className="size-6 bg-gray-200 rounded-full p-1 text-primary cursor-pointer"
+          onClick={() => {
+            onSubmit({
+              id,
+              title,
+              lessons: [],
+              description: "",
+              precedence:
+                course.units
+                  .map((unit) => unit.precedence)
+                  .reduce((a, b) => Math.max(a, b), 0) + 10,
+            });
+          }}
+        />
+      </div>
+    </li>
+  );
+}
+
 export default function CoursePage() {
   const { course, error, isLoading } = useCourse();
   const { isEditing, setIsEditing } = useEdit();
-  const [learningProgress, setLearningProgress] = useState(null);
+  const onSubmit = useCallback(async (unit: Unit) => {
+    await addUnit(course.id, unit);
+    course.units.push(unit);
+    setIsEditing(false);
+  }, []);
 
   const header = (
     <Breadcrumb
@@ -98,38 +163,13 @@ export default function CoursePage() {
   return (
     <div>
       {header}
-
       <div className="container my-16 mt-12 grid grid-flow-col-dense">
         <ol className="grid grid-cols-[repeat(auto-fit,minmax(384px,448px))] gap-4">
           {course &&
             course.units.map((unit, idx) => (
-              <SingleUnit
-                key={unit.id}
-                idx={idx}
-                course={course}
-                unit={unit}
-                learningProgress={learningProgress}
-              />
+              <SingleUnit key={unit.id} idx={idx} course={course} unit={unit} />
             ))}
-          {isEditing && (
-            <li className="max-w-xl cursor-pointer rounded-lg bg-gray-100 p-4 dark:bg-gray-800 flex-1">
-              <div className="mb-2 text-lg font-semibold text-body-color">
-                <span className="text-xl text-black dark:text-white">
-                  Unit {course.units.length + 1}.
-                </span>{" "}
-                <input
-                  type="text"
-                  placeholder="Unit title"
-                  className="inline-block h-8 p-2"
-                />
-              </div>
-              <ul className="flex flex-row gap-2">
-                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
-                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
-                <div className="size-8 rounded-md bg-gray-200 dark:bg-gray-700"></div>
-              </ul>
-            </li>
-          )}
+          {isEditing && <NewUnit course={course} onSubmit={onSubmit} />}
         </ol>
       </div>
     </div>

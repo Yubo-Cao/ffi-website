@@ -1,8 +1,8 @@
 import CoursePage, { CoursePageProps } from "@/components/Lesson/CoursePage";
 import { getCoursesSummary } from "@/lib/course";
 
-export default async function Page({ params }: CoursePageProps) {
-  return <CoursePage params={params} />;
+export default async function Page() {
+  return <CoursePage />;
 }
 
 export async function generateStaticParams(): Promise<

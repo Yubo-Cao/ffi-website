@@ -8,6 +8,7 @@ import {
   getDocs,
   orderBy,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "@firebase/firestore";
@@ -250,6 +251,25 @@ export async function getUnit(unitId: string): Promise<Unit> {
       type: lesson.data().type,
     })),
   };
+}
+
+export async function addUnit(courseId: string, unit: Unit): Promise<Unit> {
+  if (unit.id) {
+    const { id, ...unitWithoutId } = unit;
+    await setDoc(doc(UNIT_COL, unit.id), {
+      ...unitWithoutId,
+      course: doc(COURSE_COL, courseId),
+    });
+    return unit;
+  }
+  const unitRef = await addDoc(UNIT_COL, {
+    ...unit,
+    course: doc(COURSE_COL, courseId),
+  });
+  return {
+    id: unitRef.id,
+    ...unit,
+  } as Unit;
 }
 
 export async function addLesson(
