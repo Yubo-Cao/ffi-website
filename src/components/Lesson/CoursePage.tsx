@@ -151,18 +151,24 @@ export default function CoursePage() {
   const { course, error, isLoading, setCourse } = useCourse();
   const { isEditing, setIsEditing } = useEdit();
 
-  const onAddUnit = useCallback(async (unit: Unit) => {
-    await addUnit(course.id, unit);
-    course.units.push(unit);
-    setCourse(course);
-    setIsEditing(false);
-  }, []);
-  const deleteUnit = useCallback(async (unitId: string) => {
-    course.units = course.units.filter((unit) => unit.id !== unitId);
-    await removeUnit(unitId);
-    setCourse(course);
-    setIsEditing(false);
-  }, []);
+  const onAddUnit = useCallback(
+    async (unit: Unit) => {
+      await addUnit(course.id, unit);
+      course.units.push(unit);
+      setCourse(course);
+      setIsEditing(false);
+    },
+    [course, setCourse, setIsEditing],
+  );
+  const deleteUnit = useCallback(
+    async (unitId: string) => {
+      course.units = course.units.filter((unit) => unit.id !== unitId);
+      await removeUnit(unitId);
+      setCourse(course);
+      setIsEditing(false);
+    },
+    [course, setCourse, setIsEditing],
+  );
 
   const header = (
     <Breadcrumb
