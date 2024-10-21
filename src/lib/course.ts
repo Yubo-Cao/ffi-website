@@ -177,21 +177,12 @@ export async function getCourse(courseId: string): Promise<Course> {
   );
   const unitData = await Promise.all(
     units.docs.map(async (unit) => {
-      const lessons = await getDocs(
-        query(LESSON_COL, where("unit", "==", unit.ref), orderBy("precedence")),
-      );
       return {
         id: unit.id,
         title: unit.data().title,
         precedence: unit.data().precedence,
         description: unit.data().description,
-        lessons: lessons.docs.map((lesson) => ({
-          id: lesson.id,
-          title: lesson.data().title,
-          precedence: lesson.data().precedence,
-          content: lesson.data().content,
-          type: lesson.data().type,
-        })),
+        lessons: [],
       };
     }),
   );
