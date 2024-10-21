@@ -3,8 +3,9 @@
 import SectionTitle from "@/components/Common/SectionTitle";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { MdFace } from "react-icons/md";
+import { MdChevronRight, MdFace } from "react-icons/md";
 
 type Committee =
   | "executive"
@@ -60,7 +61,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
       role: "Marketing/Outreach",
     },
     {
-      name: "Syma Nisarg",
+      name: "Syma Narang",
       role: "Marketing/Outreach",
     },
   ],
@@ -76,10 +77,6 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
       role: "Mid-Atlantic Regional Director",
     },
     {
-      name: "Evan Trost",
-      role: "Southeast Regional Director",
-    },
-    {
       name: "Harkhush Singh",
       role: "Midwest Regional Director",
     },
@@ -92,7 +89,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
     },
     {
       name: "Anish Rachakonda",
-      role: "Director of Technology",
+      role: "Technology",
     },
   ],
 };
@@ -242,6 +239,15 @@ export const Team = () => {
             <Member key={member.name} {...member} />
           ))}
         </motion.div>
+      </div>
+      <div className="flex items-center pt-4">
+        <Link
+          className="font-semi-bold mt-2 inline-block border border-primary px-5 py-3 text-lg text-primary mx-auto"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdzrPyUH1UluxqbdIdr52gWoUzMmL0hVysMzwXGdjVbzd5JcA/viewform"
+        >
+          Join Now
+          <MdChevronRight className="ml-2 inline-block" />
+        </Link>
       </div>
     </section>
   );

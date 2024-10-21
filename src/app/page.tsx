@@ -2,6 +2,7 @@ import ScrollUp from "@/components/Common/ScrollUp";
 import Hero from "@/components/Hero";
 import { MorningBrew } from "@/components/Home/HomeSectionMorningBrew";
 import HomeSectionSponsors from "@/components/Home/HomeSectionSponsors";
+import Opportunities from "@/components/Opportunities";
 import Statistics from "@/components/Statistics";
 import { DESCRIPTION, NAME } from "@/lib/constants";
 import { Metadata } from "next";
@@ -17,7 +18,7 @@ export default function Home() {
     <>
       <ScrollUp />
       <Hero />
-      {/*<Opportunities />*/}
+      <Opportunities />
       <Statistics />
       {/*<HomeSectionScholarship />*/}
       <MorningBrew />

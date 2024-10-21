@@ -65,7 +65,7 @@ const opportunitiesData: Feature[] = [
     ),
     title: "Financial Literacy program",
     paragraph:
-      "We address the lack of financial education by offering an interactive platform for underserved communities. Teams of volunteers will be recruited to deliver hands-on workshops, empowering teenagers to make informed financial decisions.",
+      "We address the lack of financial education by offering an interactive platform for underserved communities. Teams of volunteers will be recruited to create content for interactive online learning platform that empowers youths with financial knowledge.",
   },
 ];
 export default opportunitiesData;

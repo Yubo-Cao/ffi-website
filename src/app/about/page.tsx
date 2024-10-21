@@ -4,6 +4,8 @@ import SectionTitle from "@/components/Common/SectionTitle";
 import Team from "@/components/Team";
 import { NAME } from "@/lib/constants";
 import { Metadata } from "next";
+import Link from "next/link";
+import { MdChevronRight } from "react-icons/md";
 
 export const metadata: Metadata = {
   title: `About | ${NAME}`,

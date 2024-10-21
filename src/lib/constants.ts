@@ -1,6 +1,6 @@
 import { Cormorant_Garamond, Inter } from "next/font/google";
 
-export const NAME = "Future Financing Inc.";
+export const NAME = "Future Finance Inc.";
 export const DESCRIPTION =
   "Organization providing free, accessible financial education to all.";
 export const PLACEHOLDER = () => {

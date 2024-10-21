@@ -72,7 +72,7 @@ const Hero = () => {
             >
               We are a student-run nonprofit financial education organization
               that provides free financial education to help young adults make
-              informed decisions about your money.
+              informed decisions about their money.
             </motion.p>
             <motion.div
               className="flex flex-wrap items-center gap-4 sm:flex-row"
