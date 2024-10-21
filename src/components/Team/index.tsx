@@ -243,10 +243,9 @@ export const Team = () => {
       <div className="flex items-center pt-4">
         <Link
           className="font-semi-bold mt-2 inline-block border border-primary px-5 py-3 text-lg text-primary mx-auto"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdzrPyUH1UluxqbdIdr52gWoUzMmL0hVysMzwXGdjVbzd5JcA/viewform"
+          href="https://forms.gle/Vz3haWQFYzjff7Gx6"
         >
           Join Now
-          <MdChevronRight className="ml-2 inline-block" />
         </Link>
       </div>
     </section>
