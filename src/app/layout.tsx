@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import { NAME, FONT } from "@/lib/constants";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -36,6 +37,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <SpeedInsights />
           <Footer />
           <ScrollToTop />
         </Providers>
