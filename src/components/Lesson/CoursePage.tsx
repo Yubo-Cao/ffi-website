@@ -211,7 +211,7 @@ export default function CoursePage() {
     <div>
       {header}
       <div className="container my-16 mt-12 grid grid-flow-col-dense">
-        <ol className="grid grid-cols-[repeat(auto-fit,minmax(384px,448px))] gap-4">
+        <ol className="grid sm:grid-cols-[repeat(auto-fit,minmax(384px,448px))] gap-4">
           {course &&
             course.units.map((unit, idx) => (
               <SingleUnit

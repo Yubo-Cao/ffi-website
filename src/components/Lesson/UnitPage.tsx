@@ -201,7 +201,7 @@ export default function UnitPage({ params }: UnitPageProps) {
     <div>
       {header}
       <div className="container my-16 mt-12 grid grid-flow-col-dense">
-        <ol className="grid grid-flow-row-dense grid-cols-[repeat(auto-fit,minmax(384px,512px))] gap-4">
+        <ol className="grid grid-flow-row-dense sm:grid-cols-[repeat(auto-fit,minmax(384px,512px))] gap-4">
           {unit &&
             unit.lessons.map((lesson, idx) => (
               <SingleLesson

@@ -17,14 +17,14 @@ const EditProvider = ({ children }) => {
     <EditContext.Provider value={{ isEditing, setIsEditing }}>
       {children}
       {isAdmin && (
-        <div className="fixed bottom-24 right-24 z-[100]">
+        <div className="fixed bottom-20 right-8 z-[100]">
           <button
             onClick={() => setIsEditing((prev) => !prev)}
             aria-label="edit lesson"
-            className="flex size-16 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="flex size-10 cursor-pointer items-center justify-center rounded-md bg-primary text-white shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             <div className="text-lg text-white">
-              <MdEdit className="size-8" />
+              <MdEdit className="size-6" />
             </div>
           </button>
         </div>
