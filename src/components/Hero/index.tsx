@@ -102,12 +102,19 @@ const Hero = () => {
                   scrollYProgress,
                   [0, 0.8, 1],
                   [
-                    -(containerHeight + 48) / height,
-                    -(containerHeight + 48) / height,
+                    width > 1200
+                      ? -(containerHeight + 48) / height
+                      : 196 / height,
+                    width > 1200
+                      ? -(containerHeight + 48) / height
+                      : 196 / height,
                     1,
                   ],
                 ),
-                (v) => (v * height + containerHeight) / 2 + 48,
+                (v) =>
+                  width > 1200
+                    ? (v * height + containerHeight) / 2 + 48
+                    : (v * height - 196) / 2,
               ),
               translateX: useTransform(
                 useTransform(
@@ -115,7 +122,7 @@ const Hero = () => {
                   [0.8, 0.8, 1],
                   [196 / containerWidth, 196 / containerWidth, 1],
                 ),
-                (v) => (v * containerWidth - 196) / 2,
+                (v) => (width > 1200 ? (v * containerWidth - 196) / 2 : 0),
               ),
             }}
           >
