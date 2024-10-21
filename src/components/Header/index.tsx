@@ -51,7 +51,7 @@ const Header = () => {
         className={`header left-0 top-0 z-40 flex w-full items-center bg-bg-color ${INTER.className} ${
           sticky
             ? "fixed z-[9999] !bg-opacity-80 shadow-sticky backdrop-blur-sm transition dark:shadow-sticky-dark"
-            : "absolute"
+            : "absolute z-[9999]"
         }`}
       >
         <div className="container">
