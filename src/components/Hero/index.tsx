@@ -33,15 +33,6 @@ const itemVariants = {
   },
 };
 
-const imageVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6 },
-  },
-};
-
 const Hero = () => {
   const scrollDown = useCallback(() => {
     document.getElementById("statistics").scrollIntoView({
@@ -49,13 +40,18 @@ const Hero = () => {
     });
   }, []);
   const heroRef = useRef(null);
+  const containerRef = useRef(null);
+
   const { scrollY, scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start end", "end end"],
   });
   const { height, width } = useWindowDimensions();
+  const containerWidth = containerRef.current?.offsetWidth || 0;
+  const containerHeight = containerRef.current?.offsetHeight || 0;
+
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log(latest, height);
+    console.log(latest, containerWidth, containerHeight, height);
   });
 
   return (
@@ -94,10 +90,33 @@ const Hero = () => {
         >
           <motion.div
             style={{
-              scale: useSpring(scrollYProgress, {
-                stiffness: 400,
-                damping: 90,
-              }),
+              scale: useSpring(
+                useTransform(scrollYProgress, [0, 0.8], [0.2, 1]),
+                {
+                  stiffness: 400,
+                  damping: 90,
+                },
+              ),
+              translateY: useTransform(
+                useTransform(
+                  scrollYProgress,
+                  [0, 0.8, 1],
+                  [
+                    -(containerHeight + 48) / height,
+                    -(containerHeight + 48) / height,
+                    1,
+                  ],
+                ),
+                (v) => (v * height + containerHeight) / 2 + 48,
+              ),
+              translateX: useTransform(
+                useTransform(
+                  scrollYProgress,
+                  [0.8, 0.8, 1],
+                  [196 / containerWidth, 196 / containerWidth, 1],
+                ),
+                (v) => (v * containerWidth - 196) / 2,
+              ),
             }}
           >
             <Image
@@ -128,15 +147,12 @@ const Hero = () => {
         }}
       ></motion.div>
       <motion.div
-        className="h-screen"
         style={{
-          display: useTransform(scrollYProgress, (v) =>
-            v >= 1 ? "none" : "block",
-          ),
+          height: useTransform(scrollYProgress, (v) => (v >= 1 ? 1 : "100vh")),
         }}
         ref={heroRef}
       ></motion.div>
-      <div className="container mt-12">
+      <div className="container mt-12" ref={containerRef}>
         <div className="flex flex-col-reverse flex-wrap px-4 -mx-4 lg:gap-12 xl:flex-row xl:px-12">
           <motion.div
             className="max-w-[700px]"
@@ -185,22 +201,6 @@ const Hero = () => {
                 </button>
               </motion.div>
             </motion.div>
-          </motion.div>
-          <motion.div
-            className="flex items-center justify-center flex-1"
-            variants={imageVariants}
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            <div className="relative p-12 -my-8 rounded-full aspect-square xl:mb-0">
-              <Image
-                src={LOGO}
-                alt={NAME}
-                width={196}
-                height={196}
-                className="dark:invert"
-              />
-            </div>
           </motion.div>
         </div>
       </div>
