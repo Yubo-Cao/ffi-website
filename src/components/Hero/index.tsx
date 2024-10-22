@@ -43,7 +43,7 @@ const Hero = () => {
   const containerRef = useRef(null);
 
   const { scrollY, scrollYProgress } = useScroll({
-    target: heroRef,
+    target: containerRef,
     offset: ["start end", "end end"],
   });
   const { height, width } = useWindowDimensions();
@@ -91,7 +91,7 @@ const Hero = () => {
           <motion.div
             style={{
               scale: useSpring(
-                useTransform(scrollYProgress, [0, 0.8], [0.2, 1]),
+                useTransform(scrollYProgress, [0, 0.65], [0.2, 1]),
                 {
                   stiffness: 400,
                   damping: 90,
@@ -100,7 +100,7 @@ const Hero = () => {
               translateY: useTransform(
                 useTransform(
                   scrollYProgress,
-                  [0, 0.8, 1],
+                  [0, 0.65, 1],
                   [
                     width > 1200
                       ? -(containerHeight + 48) / height
@@ -119,7 +119,7 @@ const Hero = () => {
               translateX: useTransform(
                 useTransform(
                   scrollYProgress,
-                  [0.8, 0.8, 1],
+                  [0.65, 0.65, 1],
                   [196 / containerWidth, 196 / containerWidth, 1],
                 ),
                 (v) => (width > 1200 ? (v * containerWidth - 196) / 2 : 0),
