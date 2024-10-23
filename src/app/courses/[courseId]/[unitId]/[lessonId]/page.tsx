@@ -1,7 +1,8 @@
 import LessonPage, { LessonPageProps } from "@/components/Lesson/LessonPage";
 import { getCourse, getCoursesSummary } from "@/lib/course";
 
-export default async function Page({ params }: LessonPageProps) {
+export default async function Page(props: LessonPageProps) {
+  const params = await props.params;
   return <LessonPage params={params} />;
 }
 

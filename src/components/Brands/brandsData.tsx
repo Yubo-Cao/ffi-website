@@ -18,7 +18,7 @@ const brandsData: Brand[] = [
   {
     id: 3,
     name: "Habit 365",
-    href: "https://habit365.com/",
+    href: "https://habits365.com/",
     image: "/images/brands/habits-365.png",
     imageLight: "/images/brands/habits-365.png",
   },

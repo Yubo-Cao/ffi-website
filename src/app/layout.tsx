@@ -33,7 +33,9 @@ export default function RootLayout({
         <title>{NAME}</title>
       </head>
 
-      <body className={`bg-[#FCFCFC] dark:bg-black ${FONT.className}`}>
+      <body
+        className={`bg-[#FCFCFC] dark:bg-black ${FONT.className} scroll-smooth`}
+      >
         <Providers>
           <Header />
           {children}

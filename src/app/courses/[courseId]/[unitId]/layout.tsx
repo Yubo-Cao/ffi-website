@@ -1,5 +1,11 @@
 import { UnitProvider } from "@/components/Lesson/UnitProvider";
 
-export default function UnitLayout({ children, params }) {
+export default async function UnitLayout(props) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   return <UnitProvider params={params}>{children}</UnitProvider>;
 }
