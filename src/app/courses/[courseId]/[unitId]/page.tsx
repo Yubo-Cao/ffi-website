@@ -1,7 +1,9 @@
 import UnitPage, { UnitPageProps } from "@/components/Lesson/UnitPage";
 import { getCourse, getCoursesSummary } from "@/lib/course";
 
-export default async function Page(props: UnitPageProps) {
+export default async function Page(props: {
+  params: Promise<UnitPageProps["params"]>;
+}) {
   const params = await props.params;
   return <UnitPage params={params} />;
 }
