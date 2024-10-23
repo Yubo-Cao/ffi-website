@@ -46,7 +46,7 @@ const Hero = () => {
             scale: gsap.utils.mapRange(0, bp[1], 0.5, 1, progressBp1),
           });
           gsap.set(overlayRef.current, {
-            opacity: gsap.utils.interpolate(0, bp[0], progress),
+            opacity: gsap.utils.mapRange(0, bp[1], 0, 0.5, progressBp1),
             backdropFilter: `blur(${gsap.utils.mapRange(0, bp[1], 0, 10, progressBp1)}px)`,
           });
           gsap.set(heroBgRef.current, {
@@ -85,7 +85,7 @@ const Hero = () => {
                 duration: 0.5,
               });
             } else {
-              gsap.set(logoRef.current, {
+              gsap.to(logoRef.current, {
                 opacity: 0,
                 duration: 0.5,
               });
@@ -94,8 +94,8 @@ const Hero = () => {
             if (window.innerWidth >= 1200) {
               gsap.set(logoRef.current, {
                 x: gsap.utils.mapRange(
-                  0.75,
-                  0.9,
+                  bp[2],
+                  bp[3],
                   0,
                   (contentRef.current.offsetWidth - 700 - 48 * 2) / 2,
                   progress,
@@ -107,9 +107,8 @@ const Hero = () => {
               });
             }
           } else if (progress >= bp[1]) {
-            gsap.to(logoRef.current, {
+            gsap.set(logoRef.current, {
               x: 0,
-              duration: 0.5,
             });
             gsap.to(circleRef.current, {
               opacity: 1,
@@ -137,12 +136,10 @@ const Hero = () => {
       <div className="h-screen overflow-clip" ref={heroRef}>
         <Image
           src={heroBg}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
           alt="Hero Background"
-          className="z-0"
+          className="z-0 object-cover object-center"
           ref={heroBgRef}
+          fill
         />
         <div
           className="absolute left-0 top-0 right-0 bottom-0 bg-white z-1 opacity-0"
