@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/lib/firebase";
 import { User, USER_COL } from "@/lib/user";
 import {
@@ -161,10 +163,6 @@ const ENROLLMENT_COL = collection(db, "enrollments");
 const LEARNING_PROGRESS_COL = collection(db, "learningProgress");
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
-export function checkId(id: string): boolean {
-  return /^[a-z][a-z0-9-]*$/.test(id);
-}
 
 export async function getCourse(courseId: string): Promise<Course> {
   const course = await getDoc(doc(COURSE_COL, courseId));

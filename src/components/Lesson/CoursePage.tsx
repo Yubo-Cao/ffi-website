@@ -5,7 +5,6 @@ import { useCourse } from "@/components/Lesson/CourseProvider";
 import { useEdit } from "@/components/Lesson/EditProvider";
 import {
   addUnit,
-  checkId,
   Course,
   LearningProgress,
   removeUnit,
@@ -99,11 +98,9 @@ function NewUnit({
           placeholder="Unit ID"
           value={id}
           onChange={(e) =>
-            checkId(e.target.value) &&
             !course.units
               .map((el) => el.id === e.target.value)
-              .reduce((a, b) => a || b, false) &&
-            setId(e.target.value)
+              .reduce((a, b) => a || b, false) && setId(e.target.value)
           }
           className="inline-block h-8 p-2"
           pattern={"[a-z][a-z0-9]+"}
