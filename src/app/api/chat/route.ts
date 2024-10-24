@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import { NextRequest } from "next/server";
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
