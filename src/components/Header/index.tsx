@@ -64,6 +64,7 @@ const Header = () => {
                   width={48}
                   height={48}
                   className="w-full dark:invert"
+                  priority
                 />
               </Link>
             </div>

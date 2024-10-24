@@ -2,16 +2,16 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Loader from "@/components/Common/Loader";
+import Chat from "@/components/Lesson/Chat";
 import { LessonNavigate } from "@/components/Lesson/LessonNavigate";
+import { useLesson } from "@/components/Lesson/LessonProvider";
 import LessonSidebar from "@/components/Lesson/LessonSidebar";
 import QuizLesson from "@/components/Lesson/QuizLesson";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import { useUnit } from "@/components/Lesson/UnitProvider";
-import { getLesson, Lesson } from "@/lib/course";
 import Link from "next/link";
 import { useEffect } from "react";
 import { MdError } from "react-icons/md";
-import useSWR from "swr";
 
 export type LessonPageProps = {
   params: {
@@ -24,14 +24,11 @@ export type LessonPageProps = {
 export default function LessonPage({ params }: LessonPageProps) {
   const { unit, error: unitError, isLoading: isUnitLoading } = useUnit();
   const {
-    data: lesson,
+    lesson,
     isLoading: isLessonLoading,
     error: lessonError,
-    mutate: setLesson,
-  } = useSWR<Lesson>(
-    `/lessons/${params.lessonId}`,
-    async () => await getLesson(params.lessonId),
-  );
+    setLesson,
+  } = useLesson();
 
   useEffect(() => {
     if (!isLessonLoading) document.title = `${lesson.title}`;
@@ -98,6 +95,7 @@ export default function LessonPage({ params }: LessonPageProps) {
             />
           </div>
         </div>
+        <Chat />
       </div>
     </>
   );

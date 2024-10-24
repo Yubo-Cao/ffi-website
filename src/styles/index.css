@@ -7,7 +7,8 @@
 @layer base {
     body {
         /* Note: Cormorant Garamond is loaded through Google Fonts */
-        font-family: "Cormorant Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+        font-family: "Cormorant Garamond", ui-serif, Georgia, Cambria,
+        "Times New Roman", Times, serif;
     }
 
     :root {
@@ -42,5 +43,16 @@
 
     input#checkboxLabel:checked ~ .box span {
         @apply opacity-100;
+    }
+}
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
