@@ -85,7 +85,7 @@ const Hero = () => {
                 duration: 0.5,
               });
             } else {
-              gsap.to(logoRef.current, {
+              gsap.set(logoRef.current, {
                 opacity: 0,
                 duration: 0.5,
               });
