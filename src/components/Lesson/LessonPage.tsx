@@ -2,11 +2,11 @@
 
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Loader from "@/components/Common/Loader";
-import Chat from "@/components/Lesson/Chat";
+import { FloatingChat } from "@/components/Lesson/Chat";
 import { LessonNavigate } from "@/components/Lesson/LessonNavigate";
 import { useLesson } from "@/components/Lesson/LessonProvider";
 import LessonSidebar from "@/components/Lesson/LessonSidebar";
-import QuizLesson from "@/components/Lesson/QuizLesson";
+import Quiz from "@/components/Lesson/Quiz/Quiz";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import { useUnit } from "@/components/Lesson/UnitProvider";
 import Link from "next/link";
@@ -86,7 +86,7 @@ export default function LessonPage({ params }: LessonPageProps) {
                 setLesson={setLesson}
               />
             ) : (
-              <QuizLesson lesson={lesson} setLesson={setLesson} />
+              <Quiz lesson={lesson} setLesson={setLesson} />
             )}
             <LessonNavigate
               lesson={lesson}
@@ -95,7 +95,7 @@ export default function LessonPage({ params }: LessonPageProps) {
             />
           </div>
         </div>
-        <Chat />
+        <FloatingChat context={lesson.content} />
       </div>
     </>
   );
