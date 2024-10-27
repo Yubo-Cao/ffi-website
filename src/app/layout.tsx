@@ -30,7 +30,6 @@ export default function RootLayout({
         />
         <meta name="apple-mobile-web-app-title" content="FFI" />
         <link rel="manifest" href="/site.webmanifest" />
-
         <link rel="preload" href="/images/logo.svg" as="image" />
         <title>{NAME}</title>
       </head>
