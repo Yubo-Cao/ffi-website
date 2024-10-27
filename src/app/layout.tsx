@@ -2,7 +2,7 @@ import "../styles/index.css";
 import { Providers } from "./providers";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { FONT, NAME } from "@/lib/constants";
+import { FONT, INTER, NAME } from "@/lib/constants";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import React from "react";
 
@@ -30,6 +30,8 @@ export default function RootLayout({
         />
         <meta name="apple-mobile-web-app-title" content="FFI" />
         <link rel="manifest" href="/site.webmanifest" />
+
+        <link rel="preload" href="/images/logo.svg" as="image" />
         <title>{NAME}</title>
       </head>
 
