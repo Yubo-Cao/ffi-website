@@ -64,3 +64,4 @@ export const QuizHelpChat = forwardRef(
     );
   },
 );
+QuizHelpChat.displayName = "QuizHelpChat";

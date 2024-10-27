@@ -54,39 +54,45 @@ const QuizDisplay: React.FC<QuizDisplayProps> = React.memo(
       [popupPinned, setActivePopup, setCurrentHovering, setPopupPosition],
     );
 
-    const handleMouseMove = (event) => {
-      if (popupPinned) {
-        return;
-      }
-      if (activePopup === null) {
-        return;
-      }
-      if (currentHovering !== null) {
-        return;
-      }
-      if (
-        quizChatRef.current &&
-        !quizChatRef.current.contains(event.target as Node)
-      ) {
-        setActivePopup(null);
-      }
-    };
-
-    const handleScroll = () => {
-      if (popupPinned) {
-        return;
-      }
-      setActivePopup(null);
-    };
-
     useEffect(() => {
+      const handleMouseMove = (event) => {
+        if (popupPinned) {
+          return;
+        }
+        if (activePopup === null) {
+          return;
+        }
+        if (currentHovering !== null) {
+          return;
+        }
+        if (
+          quizChatRef.current &&
+          !quizChatRef.current.contains(event.target as Node)
+        ) {
+          setActivePopup(null);
+        }
+      };
+
+      const handleScroll = () => {
+        if (popupPinned) {
+          return;
+        }
+        setActivePopup(null);
+      };
+
       document.addEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
       return () => {
         document.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("scroll", handleScroll);
       };
-    }, [handleMouseMove, handleScroll]);
+    }, [
+      activePopup,
+      currentHovering,
+      popupPinned,
+      setActivePopup,
+      quizChatRef,
+    ]);
 
     const handleAnswerSelect = useCallback(
       (answer: string) => {
@@ -189,7 +195,7 @@ const QuizDisplay: React.FC<QuizDisplayProps> = React.memo(
                   </p>
                   {!feedback.correct && (
                     <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 
+                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400
                       dark:hover:text-gray-200"
                       onClick={(e) => handleQuestionHover(e, index)}
                     >
@@ -222,5 +228,4 @@ const QuizDisplay: React.FC<QuizDisplayProps> = React.memo(
 );
 
 QuizDisplay.displayName = "QuizDisplay";
-
 export default QuizDisplay;
