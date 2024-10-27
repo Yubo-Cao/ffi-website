@@ -68,7 +68,7 @@ const VideoBackground = (
     };
 
     preloadVideo();
-  }, [setVideoSource, onLoad]);
+  }, [setVideoSource, onLoad, videoRef]);
 
   return (
     <>

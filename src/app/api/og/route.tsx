@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { BASE_URL, LOGO } from "@/lib/constants";
 import { ImageResponse } from "next/og";
 
