@@ -1,12 +1,15 @@
 "use client";
 
+import { VideoPlaceholder } from "@/components/Hero/VideoBackground";
 import { LOGO, NAME } from "@/lib/constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useRef } from "react";
+import { lazy, Suspense, useCallback, useRef, useState } from "react";
+
+const VideoBackground = lazy(() => import("./VideoBackground"));
 
 const Hero = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -17,6 +20,7 @@ const Hero = () => {
     });
   }, []);
 
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
@@ -139,17 +143,16 @@ const Hero = () => {
       ref={containerRef}
     >
       <div className="h-screen overflow-clip" ref={heroRef}>
-        <div className="absolute inset-0 w-full h-full">
-          <video
-            muted
-            loop
-            playsInline
-            className="absolute w-full h-full object-cover"
-            src="/videos/hero-bg.mp4"
+        <Suspense fallback={<VideoPlaceholder />}>
+          <VideoBackground
+            onLoad={() => setIsVideoLoaded(true)}
             ref={heroBgRef}
           />
-        </div>
-        <div className="abs-full bg-white z-1 opacity-0" ref={overlayRef}></div>
+        </Suspense>
+        <div
+          className={`"abs-full bg-white z-1 ${isVideoLoaded ? "opacity-0" : "opacity-100"}"`}
+          ref={overlayRef}
+        ></div>
         <div
           className="absolute z-0 size-48 bg-white rounded-full abs-center opacity-0 origin-center"
           style={{
