@@ -2,6 +2,7 @@
 
 import SWRProvider from "@/components/Common/SWRProvider";
 import { UserProvider } from "@/components/Common/UserProvider";
+import ReactLenis from "lenis/dist/lenis-react";
 import { ThemeProvider } from "next-themes";
 
 export function Providers({ children }) {
@@ -12,7 +13,9 @@ export function Providers({ children }) {
         enableSystem={false}
         defaultTheme="light"
       >
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <ReactLenis root>{children}</ReactLenis>
+        </UserProvider>
       </ThemeProvider>
     </SWRProvider>
   );

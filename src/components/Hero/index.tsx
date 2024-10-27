@@ -48,9 +48,15 @@ const Hero = () => {
             opacity: gsap.utils.mapRange(0, bp[1], 0, 0.5, progressBp1),
             backdropFilter: `blur(${gsap.utils.mapRange(0, bp[1], 0, 10, progressBp1)}px)`,
           });
-          gsap.set(heroBgRef.current, {
-            scale: gsap.utils.mapRange(0, bp[1], 1, 1.1, progress),
-          });
+
+          if (heroBgRef.current) {
+            const video = heroBgRef.current;
+            if (video.duration) {
+              const ease = "power1.inOut";
+              const easedProgress = gsap.parseEase(ease)(self.progress);
+              video.currentTime = easedProgress * video.duration;
+            }
+          }
 
           if (progress <= bp[3]) {
             gsap.to(contentRef.current, {
@@ -135,7 +141,6 @@ const Hero = () => {
       <div className="h-screen overflow-clip" ref={heroRef}>
         <div className="absolute inset-0 w-full h-full">
           <video
-            autoPlay
             muted
             loop
             playsInline

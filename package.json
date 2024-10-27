@@ -20,6 +20,7 @@
     "firebase-auth": "^0.1.2",
     "framer-motion": "^12.0.0-alpha.1",
     "gsap": "^3.12.5",
+    "lenis": "^1.1.14",
     "next": "15.0.1",
     "next-firebase-auth-edge": "^1.7.1",
     "next-themes": "^0.3.0",
