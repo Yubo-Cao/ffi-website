@@ -161,7 +161,7 @@ const Header = () => {
                 </div>
                 <div>
                   {isLogin ? (
-                    <Link href="/dashboard">
+                    <Link href="/dashboard" aria-label="Dashboard">
                       {user.photoURL ? (
                         <Image
                           src={user.photoURL}
@@ -175,7 +175,7 @@ const Header = () => {
                       )}
                     </Link>
                   ) : (
-                    <Link href="/login">
+                    <Link href="/login" aria-label="Login">
                       <MdLogin className="text-2xl text-dark dark:text-white" />
                     </Link>
                   )}
