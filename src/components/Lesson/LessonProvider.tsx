@@ -9,36 +9,49 @@ const LessonContext = createContext<{
   setLesson: (lesson: Lesson) => void;
   isLoading: boolean;
   error: Error | null;
-}>({
-  lesson: null,
-  setLesson: () => {},
-  isLoading: false,
-  error: null,
-});
+}>(null!);
 
-const LessonProvider = ({ params, children }) => {
+export const LessonProvider = ({
+  initialData,
+  params,
+  children,
+}: {
+  initialData: Lesson;
+  params: any;
+  children: React.ReactNode;
+}) => {
   const {
     data: lesson,
     isLoading,
     error,
     mutate: setLesson,
-  } = useSWR<Lesson>(`/lessons/${params.lessonId}`, () =>
-    getLesson(params.lessonId),
+  } = useSWR<Lesson>(
+    `/lessons/${params.lessonId}`,
+    () => getLesson(params.lessonId),
+    {
+      fallbackData: initialData,
+      revalidateOnMount: !initialData,
+    },
   );
 
   return (
-    <LessonContext.Provider value={{ lesson, setLesson, isLoading, error }}>
+    <LessonContext.Provider
+      value={{
+        lesson: lesson!,
+        setLesson,
+        isLoading,
+        error,
+      }}
+    >
       {children}
     </LessonContext.Provider>
   );
 };
 
-const useLesson = () => {
+export const useLesson = () => {
   const context = useContext(LessonContext);
   if (context === undefined) {
     throw new Error("useLesson must be used within a LessonProvider");
   }
   return context;
 };
-
-export { LessonProvider, useLesson };

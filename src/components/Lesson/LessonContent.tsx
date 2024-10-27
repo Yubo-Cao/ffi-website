@@ -20,7 +20,7 @@ export type LessonPageProps = {
   };
 };
 
-export default function LessonPage({ params }: LessonPageProps) {
+export default function LessonContent({ params }: LessonPageProps) {
   const { unit, error: unitError, isLoading: isUnitLoading } = useUnit();
   const {
     lesson,
@@ -62,36 +62,52 @@ export default function LessonPage({ params }: LessonPageProps) {
   }
 
   return (
-    <>
-      <div className="flex flex-col lg:flex-row">
-        <LessonSidebar
-          courseId={params.courseId}
-          unitId={params.unitId}
-          lessonId={params.lessonId}
+    <div className="flex flex-col lg:flex-row">
+      <LessonSidebar
+        courseId={params.courseId}
+        unitId={params.unitId}
+        lessonId={params.lessonId}
+      />
+      <div className="flex-grow relative 2xl:pl-12">
+        <Breadcrumb
+          pageName={
+            lessonError != null
+              ? "Error"
+              : isLessonLoading
+                ? "<LOADING>"
+                : lesson.title
+          }
+          parentPageName={
+            unitError != null
+              ? "Error"
+              : isUnitLoading
+                ? "<LOADING>"
+                : unit.title
+          }
+          parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
+          description=""
+          className="!static"
         />
-        <div className="flex-grow relative 2xl:pl-12">
-          {header}
-          <div className="container my-16">
-            {isLessonLoading ? (
-              <Loader size={12} />
-            ) : lesson.type === "reading" ? (
-              <ReadingLesson
-                content={lesson.content}
-                lesson={lesson}
-                setLesson={setLesson}
-              />
-            ) : (
-              <Quiz lesson={lesson} setLesson={setLesson} />
-            )}
-            <LessonNavigate
+        <div className="container my-16">
+          {isLessonLoading ? (
+            <Loader size={12} />
+          ) : lesson.type === "reading" ? (
+            <ReadingLesson
+              content={lesson.content}
               lesson={lesson}
-              courseId={params.courseId}
-              unitId={params.unitId}
+              setLesson={setLesson}
             />
-          </div>
+          ) : (
+            <Quiz lesson={lesson} setLesson={setLesson} />
+          )}
+          <LessonNavigate
+            lesson={lesson}
+            courseId={params.courseId}
+            unitId={params.unitId}
+          />
         </div>
-        <FloatingChat context={lesson.content} />
       </div>
-    </>
+      <FloatingChat context={lesson.content} />
+    </div>
   );
 }

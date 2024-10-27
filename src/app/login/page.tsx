@@ -4,7 +4,7 @@ import { NAME } from "@/lib/constants";
 import { app } from "@/lib/firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function Login() {
@@ -28,16 +28,12 @@ export default function Login() {
       );
       const idToken = await credential.user.getIdToken();
 
-      const response = await fetch("/api/login", {
+      await fetch("/api/login", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
       });
-
-      if (!response.ok) {
-        throw new Error("Login API request failed");
-      }
 
       router.refresh();
       router.push("/dashboard");

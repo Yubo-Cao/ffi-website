@@ -2,7 +2,7 @@ import "../styles/index.css";
 import { Providers } from "./providers";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { FONT, INTER, NAME } from "@/lib/constants";
+import { FONT, NAME } from "@/lib/constants";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import React from "react";
 

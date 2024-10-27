@@ -1,6 +1,11 @@
-import LessonPage, { LessonPageProps } from "@/components/Lesson/LessonPage";
+import Loader from "@/components/Common/Loader";
+import LessonContent, {
+  LessonPageProps,
+} from "@/components/Lesson/LessonContent";
+import { LessonProvider } from "@/components/Lesson/LessonProvider";
 import { getCourse, getCoursesSummary, getLesson, getUnit } from "@/lib/course";
 import { Metadata } from "next";
+import React, { Suspense } from "react";
 
 type Props = {
   params: Promise<{
@@ -9,6 +14,19 @@ type Props = {
     lessonId: string;
   }>;
 };
+
+export default async function LessonPage(props: Props) {
+  const params = await props.params;
+  const initialLesson = await getLesson(params.lessonId);
+
+  return (
+    <Suspense fallback={<Loader size={12} />}>
+      <LessonProvider initialData={initialLesson} params={params}>
+        <LessonContent params={params} />
+      </LessonProvider>
+    </Suspense>
+  );
+}
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   try {
@@ -42,13 +60,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description: "The requested lesson could not be found.",
     };
   }
-}
-
-export default async function Page(props: {
-  params: Promise<LessonPageProps["params"]>;
-}) {
-  const params = await props.params;
-  return <LessonPage params={params} />;
 }
 
 export async function generateStaticParams(): Promise<

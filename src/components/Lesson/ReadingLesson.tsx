@@ -1,5 +1,7 @@
+"use client";
+
 import { useEdit } from "@/components/Lesson/EditProvider";
-import { Lesson, ReadingLesson, setLesson as updateLesson } from "@/lib/course";
+import { setLesson as updateLesson } from "@/lib/course";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { MdCheck } from "react-icons/md";
@@ -11,31 +13,33 @@ import remarkMath from "remark-math";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-type MarkdownComponentProps = {
-  content: string;
-  lesson: ReadingLesson;
-  setLesson: (lesson: Lesson) => void;
-};
-
-export default function ReadingComponent({
-  content,
-  lesson,
-  setLesson,
-}: MarkdownComponentProps) {
+export default function ReadingComponent({ content, lesson, setLesson }) {
   const [editedContent, setEditedContent] = useState(content);
   const { isEditing, setIsEditing } = useEdit();
 
-  const handleSave = () => {
-    updateLesson({ ...lesson, content: editedContent })
-      .then(() => {
-        setLesson({ ...lesson, content: editedContent });
-        setIsEditing(false);
-      })
-      .catch((e) => {
-        console.error(e);
-        alert("Failed to update lesson.");
-      });
+  const handleSave = async () => {
+    try {
+      await updateLesson({ ...lesson, content: editedContent });
+      setLesson({ ...lesson, content: editedContent });
+      setIsEditing(false);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to update lesson.");
+    }
   };
+
+  if (typeof window === "undefined") {
+    return (
+      <div className="prose dark:prose-invert">
+        <ReactMarkdown
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
+          remarkPlugins={[remarkGfm, remarkMath]}
+        >
+          {content}
+        </ReactMarkdown>
+      </div>
+    );
+  }
 
   return (
     <div>
