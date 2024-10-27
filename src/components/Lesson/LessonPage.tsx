@@ -10,7 +10,6 @@ import Quiz from "@/components/Lesson/Quiz/Quiz";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import { useUnit } from "@/components/Lesson/UnitProvider";
 import Link from "next/link";
-import { useEffect } from "react";
 import { MdError } from "react-icons/md";
 
 export type LessonPageProps = {
@@ -29,10 +28,6 @@ export default function LessonPage({ params }: LessonPageProps) {
     error: lessonError,
     setLesson,
   } = useLesson();
-
-  useEffect(() => {
-    if (!isLessonLoading) document.title = `${lesson.title}`;
-  }, [lesson, isLessonLoading]);
 
   const header = (
     <Breadcrumb

@@ -1,8 +1,6 @@
 import { getCoursesSummary, getCourse } from "@/lib/course";
 import { MetadataRoute } from "next";
 
-const ROOT_DOMAIN = "https://futurefinanceinc.org";
-
 type SitemapEntry = {
   url: string;
   lastModified: Date;
@@ -20,7 +18,7 @@ type SitemapEntry = {
 async function generateCoursePaths(): Promise<SitemapEntry[]> {
   const courseSummaries = await getCoursesSummary();
   return courseSummaries.map((course) => ({
-    url: `${ROOT_DOMAIN}/courses/${course.id}`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${course.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
@@ -35,7 +33,7 @@ async function generateUnitPaths(): Promise<SitemapEntry[]> {
     const course = await getCourse(courseSummary.id);
     for (const unit of course.units) {
       paths.push({
-        url: `${ROOT_DOMAIN}/courses/${course.id}/${unit.id}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${course.id}/${unit.id}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.7,
@@ -55,7 +53,7 @@ async function generateLessonPaths(): Promise<SitemapEntry[]> {
     for (const unit of course.units) {
       for (const lesson of unit.lessons) {
         paths.push({
-          url: `${ROOT_DOMAIN}/courses/${course.id}/${unit.id}/${lesson.id}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL}/courses/${course.id}/${unit.id}/${lesson.id}`,
           lastModified: new Date(),
           changeFrequency: "weekly",
           priority: 0.6,
@@ -70,37 +68,37 @@ async function generateLessonPaths(): Promise<SitemapEntry[]> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: SitemapEntry[] = [
     {
-      url: ROOT_DOMAIN,
+      url: process.env.NEXT_PUBLIC_SITE_URL,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
     {
-      url: `${ROOT_DOMAIN}/about`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/about`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${ROOT_DOMAIN}/actions`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/actions`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${ROOT_DOMAIN}/dashboard`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${ROOT_DOMAIN}/get-involved`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/get-involved`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${ROOT_DOMAIN}/get-involved/leader`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/get-involved/leader`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
