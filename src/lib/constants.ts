@@ -3,9 +3,6 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 export const NAME = "Future Finance Inc.";
 export const DESCRIPTION =
   "Organization providing free, accessible financial education to all.";
-export const PLACEHOLDER = () => {
-  alert("This is a placeholder function.");
-};
 export const LOGO = "/images/logo.svg";
 
 export const FONT = Cormorant_Garamond({
@@ -13,3 +10,5 @@ export const FONT = Cormorant_Garamond({
   subsets: ["latin"],
 });
 export const INTER = Inter({ subsets: ["latin"] });
+
+export const BASE_URL = "https://futurefinanceinc.org/";

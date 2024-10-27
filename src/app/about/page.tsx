@@ -2,13 +2,25 @@ import Brands from "@/components/Brands";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import SectionTitle from "@/components/Common/SectionTitle";
 import Team from "@/components/Team";
-import { NAME } from "@/lib/constants";
+import { BASE_URL, NAME } from "@/lib/constants";
+import { defaultMetadata } from "@/lib/metadata";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  ...defaultMetadata,
   title: `About | ${NAME}`,
   description:
-    "Learn more about our mission and commitment to financial education.",
+    "Learn more about our mission and commitment to financial education. We empower individuals and communities with knowledge and tools for financial independence.",
+  alternates: {
+    canonical: `${BASE_URL}/about`,
+  },
+  openGraph: {
+    ...defaultMetadata.openGraph,
+    title: `About | ${NAME}`,
+    description:
+      "Learn more about our mission and commitment to financial education. We empower individuals and communities with knowledge and tools for financial independence.",
+    url: `${BASE_URL}/about`,
+  },
 };
 
 const AboutPage = () => {

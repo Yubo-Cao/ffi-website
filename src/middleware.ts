@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   "/actions",
   "/get-involved",
   "/get-involved/leader",
+  "/api/og",
 ];
 
 export async function middleware(request: NextRequest) {
