@@ -22,8 +22,5 @@ export async function generateStaticParams(): Promise<
       });
     }
   }
-  if (!paths.length || paths.length === 0) {
-    return [{ courseId: "no-courses", unitId: "no-units" }];
-  }
   return paths;
 }

@@ -9,13 +9,9 @@ export async function generateStaticParams(): Promise<
   CoursePageProps["params"][]
 > {
   const courseSummaries = await getCoursesSummary();
-  const result = [
+  return [
     ...courseSummaries.map((courseSummary) => ({
       courseId: courseSummary.id,
     })),
   ];
-  if (!result.length || result.length === 0) {
-    return [{ courseId: "no-courses" }];
-  }
-  return result;
 }
