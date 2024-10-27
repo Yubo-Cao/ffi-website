@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
-import heroBg from "public/images/hero/hero-bg.jpg";
 import { useCallback, useRef } from "react";
 
 const Hero = () => {
@@ -24,7 +23,7 @@ const Hero = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const heroBgRef = useRef<HTMLImageElement>(null);
+  const heroBgRef = useRef<HTMLVideoElement>(null);
 
   useGSAP(
     () => {
@@ -50,7 +49,7 @@ const Hero = () => {
             backdropFilter: `blur(${gsap.utils.mapRange(0, bp[1], 0, 10, progressBp1)}px)`,
           });
           gsap.set(heroBgRef.current, {
-            scale: gsap.utils.mapRange(0, bp[0], 1, 1.1, progress),
+            scale: gsap.utils.mapRange(0, bp[1], 1, 1.1, progress),
           });
 
           if (progress <= bp[3]) {
@@ -134,19 +133,20 @@ const Hero = () => {
       ref={containerRef}
     >
       <div className="h-screen overflow-clip" ref={heroRef}>
-        <Image
-          src={heroBg}
-          alt="Hero Background"
-          className="z-0 object-cover object-center"
-          ref={heroBgRef}
-          fill
-        />
+        <div className="absolute inset-0 w-full h-full">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute w-full h-full object-cover"
+            src="/videos/hero-bg.mp4"
+            ref={heroBgRef}
+          />
+        </div>
+        <div className="abs-full bg-white z-1 opacity-0" ref={overlayRef}></div>
         <div
-          className="absolute left-0 top-0 right-0 bottom-0 bg-white z-1 opacity-0"
-          ref={overlayRef}
-        ></div>
-        <div
-          className="absolute z-0 size-48 bg-white rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 origin-center"
+          className="absolute z-0 size-48 bg-white rounded-full abs-center opacity-0 origin-center"
           style={{
             willChange: "transform",
           }}
@@ -156,12 +156,12 @@ const Hero = () => {
           src={LOGO}
           alt={NAME}
           ref={logoRef}
-          className="z-10 opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 origin-center"
+          className="z-10 opacity-0 abs-center origin-center"
           width={198}
           height={198}
         />
         <div
-          className="absolute container px-4 xl:px-12 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-0"
+          className="container px-4 xl:px-12 abs-center opacity-0"
           ref={contentRef}
         >
           <div className="max-w-[700px]">
