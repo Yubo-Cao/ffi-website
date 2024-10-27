@@ -1,6 +1,10 @@
 import { clientConfig, serverConfig } from "@/lib/config";
-import { authMiddleware, redirectToLogin } from "next-firebase-auth-edge";
-import { NextRequest } from "next/server";
+import {
+  authMiddleware,
+  redirectToLogin,
+  redirectToPath,
+} from "next-firebase-auth-edge";
+import { NextRequest, NextResponse } from "next/server";
 
 const PUBLIC_PATHS = [
   "/",
@@ -22,6 +26,17 @@ export async function middleware(request: NextRequest) {
     cookieSignatureKeys: serverConfig.cookieSignatureKeys,
     cookieSerializeOptions: serverConfig.cookieSerializeOptions,
     serviceAccount: serverConfig.serviceAccount,
+    handleValidToken: async ({ token, decodedToken }, headers) => {
+      if (PUBLIC_PATHS.includes(request.nextUrl.pathname)) {
+        return redirectToPath(request, "/dashboard");
+      }
+
+      return NextResponse.next({
+        request: {
+          headers,
+        },
+      });
+    },
     handleInvalidToken: async (reason) => {
       console.info("Missing or malformed credentials", { reason });
 
