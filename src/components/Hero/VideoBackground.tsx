@@ -56,6 +56,7 @@ const VideoBackground = (
             !("connection" in navigator) ||
             !(navigator as any).connection.saveData
           ) {
+            videoRef.current.playsInline = true;
             await videoRef.current.play();
             videoRef.current.pause();
             setIsLoading(false);
@@ -80,9 +81,7 @@ const VideoBackground = (
         }`}
         muted
         playsInline
-        preload="metadata"
         poster={videoSource.poster}
-        aria-hidden="true"
       >
         <source src={videoSource.webm} type="video/webm" />
         <source src={videoSource.mp4} type="video/mp4" />
