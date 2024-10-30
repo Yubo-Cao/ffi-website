@@ -1,15 +1,12 @@
 "use client";
 
-import { VideoPlaceholder } from "@/components/Hero/VideoBackground";
 import { LOGO, NAME } from "@/lib/constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
-import { lazy, Suspense, useCallback, useRef, useState } from "react";
-
-const VideoBackground = lazy(() => import("./VideoBackground"));
+import { useCallback, useRef } from "react";
 
 const Hero = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -20,14 +17,13 @@ const Hero = () => {
     });
   }, []);
 
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const heroBgRef = useRef<HTMLVideoElement>(null);
+  const heroBgRef = useRef<HTMLImageElement>(null);
 
   useGSAP(
     () => {
@@ -48,19 +44,13 @@ const Hero = () => {
             opacity: gsap.utils.mapRange(0, bp[1], 0, 1, progressBp1),
             scale: gsap.utils.mapRange(0, bp[1], 0.5, 1, progressBp1),
           });
+          gsap.set(heroBgRef.current, {
+            scale: gsap.utils.mapRange(0, bp[1], 1.1, 1, progressBp1),
+          });
           gsap.set(overlayRef.current, {
             opacity: gsap.utils.mapRange(0, bp[1], 0, 0.5, progressBp1),
             backdropFilter: `blur(${gsap.utils.mapRange(0, bp[1], 0, 10, progressBp1)}px)`,
           });
-
-          if (heroBgRef.current) {
-            const video = heroBgRef.current;
-            if (video.duration) {
-              const ease = "power1.inOut";
-              const easedProgress = gsap.parseEase(ease)(self.progress);
-              video.currentTime = easedProgress * video.duration;
-            }
-          }
 
           if (progress <= bp[3]) {
             gsap.to(contentRef.current, {
@@ -139,22 +129,30 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="z-10 overflow-hidden bg-white pb-16 dark:bg-gray-dark"
+      className="z-10 pb-16 overflow-hidden bg-white dark:bg-gray-dark"
       ref={containerRef}
     >
       <div className="h-screen overflow-clip" ref={heroRef}>
-        <Suspense fallback={<VideoPlaceholder />}>
-          <VideoBackground
-            onLoad={() => setIsVideoLoaded(true)}
-            ref={heroBgRef}
+        <div className="absolute inset-0" ref={heroBgRef}>
+          <Image
+            src="/images/hero/hero-bg-sm.jpg"
+            alt="Hero Background"
+            className="object-cover w-full h-full lg:hidden"
+            fill
           />
-        </Suspense>
+          <Image
+            src="/images/hero/hero-bg-lg.jpg"
+            alt="Hero Background"
+            className="hidden object-cover w-full h-full lg:block"
+            fill
+          />
+        </div>
         <div
-          className={`"abs-full bg-white z-1 ${isVideoLoaded ? "opacity-0" : "opacity-100"}"`}
+          className={`"abs-full bg-white z-1 opacity-100`}
           ref={overlayRef}
         ></div>
         <div
-          className="absolute z-0 size-48 bg-white rounded-full abs-center opacity-0 origin-center"
+          className="absolute z-0 origin-center bg-white rounded-full opacity-0 size-48 abs-center"
           style={{
             willChange: "transform",
           }}
@@ -164,12 +162,12 @@ const Hero = () => {
           src={LOGO}
           alt={NAME}
           ref={logoRef}
-          className="z-10 opacity-0 abs-center origin-center"
+          className="z-10 origin-center opacity-0 abs-center"
           width={198}
           height={198}
         />
         <div
-          className="container px-4 xl:px-12 abs-center opacity-0"
+          className="container px-4 opacity-0 xl:px-12 abs-center"
           ref={contentRef}
         >
           <div className="max-w-[700px]">
@@ -185,13 +183,13 @@ const Hero = () => {
             <div className="flex flex-wrap items-center gap-4 sm:flex-row">
               <Link
                 href={"/login"}
-                className="px-3 py-2 md:px-5 md:py-3 xl:px-8 xl:py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
+                className="px-3 py-2 text-base font-semibold text-white duration-300 ease-in-out md:px-5 md:py-3 xl:px-8 xl:py-4 bg-primary hover:bg-primary/80"
               >
                 Start Learning
               </Link>
               <button
                 onClick={scrollDown}
-                className="px-3 py-2 md:px-5 md:py-3 xl:px-8 xl:py-4 text-base font-semibold text-white duration-300 ease-in-out bg-primary hover:bg-primary/80"
+                className="px-3 py-2 text-base font-semibold text-white duration-300 ease-in-out md:px-5 md:py-3 xl:px-8 xl:py-4 bg-primary hover:bg-primary/80"
               >
                 Learn More
               </button>
