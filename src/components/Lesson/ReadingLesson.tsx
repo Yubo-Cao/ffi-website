@@ -48,13 +48,13 @@ export default function ReadingComponent({ content, lesson, setLesson }) {
           <MDEditor value={editedContent} onChange={setEditedContent} />
           <button
             onClick={handleSave}
-            className="mt-4 flex items-center rounded-md bg-primary px-4 py-2 text-white"
+            className="flex items-center px-4 py-2 mt-4 text-white rounded-md bg-primary"
           >
             <MdCheck className="mr-2" /> Save
           </button>
         </>
       ) : (
-        <div className="prose dark:prose-invert">
+        <div className="prose lg:prose-lg xl:prose-xl dark:prose-invert">
           <ReactMarkdown
             rehypePlugins={[rehypeKatex, rehypeRaw]}
             remarkPlugins={[remarkGfm, remarkMath]}

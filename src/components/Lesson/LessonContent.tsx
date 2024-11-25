@@ -45,11 +45,11 @@ export default function LessonContent({ params }: LessonPageProps) {
         {header}
         <section className="container">
           <div className="flex flex-col items-center py-24">
-            <MdError className="h-24 w-24 flex-initial text-red-500 dark:text-red-400" />
-            <h1 className="text-center text-2xl font-bold text-red-500 dark:text-red-400">
+            <MdError className="flex-initial w-24 h-24 text-red-500 dark:text-red-400" />
+            <h1 className="text-2xl font-bold text-center text-red-500 dark:text-red-400">
               Lesson not found
             </h1>
-            <p className="mt-4 text-center text-lg font-medium text-body-color">
+            <p className="mt-4 text-lg font-medium text-center text-body-color">
               Take me back to{" "}
               <Link href="/public" className="text-primary">
                 home
@@ -68,7 +68,7 @@ export default function LessonContent({ params }: LessonPageProps) {
         unitId={params.unitId}
         lessonId={params.lessonId}
       />
-      <div className="flex-grow relative 2xl:pl-12">
+      <div className="relative flex-grow 2xl:pl-12">
         <Breadcrumb
           pageName={
             lessonError != null
@@ -88,7 +88,7 @@ export default function LessonContent({ params }: LessonPageProps) {
           description=""
           className="!static"
         />
-        <div className="container my-16">
+        <div className="container flex justify-center">
           {isLessonLoading ? (
             <Loader size={12} />
           ) : lesson.type === "reading" ? (
