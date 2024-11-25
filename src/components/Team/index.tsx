@@ -26,6 +26,7 @@ const teamMembers: { [key in Committee]: TeamMember[] } = {
   executive: [
     {
       name: "Ian Fernandes",
+      image: "/team/Ian Fernandes.png",
       role: "President",
     },
     {
@@ -109,12 +110,12 @@ const Member: React.FC<TeamMember> = ({ name, role, image, bio }) => {
       alt={name}
       width={96}
       height={96}
-      className="size-24 rounded-full"
+      className="rounded-full size-24"
     />
   );
   if (!image) {
     img = (
-      <div className="flex size-24 items-center justify-center rounded-full bg-primary bg-opacity-10">
+      <div className="flex items-center justify-center rounded-full size-24 bg-primary bg-opacity-10">
         <MdFace className="mx-auto size-16 text-primary" />
       </div>
     );
@@ -170,7 +171,7 @@ const Member: React.FC<TeamMember> = ({ name, role, image, bio }) => {
           className="fixed bottom-0 left-0 right-0 top-0 z-[10000] cursor-pointer bg-black bg-opacity-80 backdrop-blur-sm"
           onClick={() => setShowBio(false)}
         >
-          <div className="flex h-full flex-col items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center h-full gap-4">
             {img}
             <p className="max-w-[600px] text-center leading-loose text-white">
               {bio}
@@ -242,7 +243,7 @@ export const Team = () => {
       </div>
       <div className="flex items-center pt-4">
         <Link
-          className="font-semi-bold mt-2 inline-block border border-primary px-5 py-3 text-lg text-primary mx-auto"
+          className="inline-block px-5 py-3 mx-auto mt-2 text-lg border font-semi-bold border-primary text-primary"
           href="https://forms.gle/Vz3haWQFYzjff7Gx6"
         >
           Join Now

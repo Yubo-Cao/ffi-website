@@ -37,3 +37,8 @@ yarn-error.log*
 
 # history
 .history/
+
+# team
+public/images/team/face-crop/
+public/images/team/raw/
+public/images/team/remove-bg
