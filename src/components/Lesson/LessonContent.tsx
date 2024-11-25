@@ -9,8 +9,9 @@ import LessonSidebar from "@/components/Lesson/LessonSidebar";
 import Quiz from "@/components/Lesson/Quiz/Quiz";
 import ReadingLesson from "@/components/Lesson/ReadingLesson";
 import { useUnit } from "@/components/Lesson/UnitProvider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { MdError } from "react-icons/md";
+import { MdError, MdMenu } from "react-icons/md";
 
 export type LessonPageProps = {
   params: {
@@ -31,21 +32,25 @@ export default function LessonContent({ params }: LessonPageProps) {
 
   const header = (
     <Breadcrumb
-      pageName={`${lessonError != null ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title}`}
-      parentPageName={`${unitError != null ? "Error" : isUnitLoading ? "<LOADING>" : unit.title}`}
+      pageName={
+        lessonError ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title
+      }
+      parentPageName={
+        unitError ? "Error" : isUnitLoading ? "<LOADING>" : unit.title
+      }
       parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
-      description={""}
-      className={`!static`}
+      description=""
+      className="!static"
     />
   );
 
-  if (lessonError != null || unitError != null) {
+  if (lessonError || unitError) {
     return (
       <div>
         {header}
         <section className="container">
           <div className="flex flex-col items-center py-24">
-            <MdError className="flex-initial w-24 h-24 text-red-500 dark:text-red-400" />
+            <MdError className="w-24 h-24 text-red-500 dark:text-red-400" />
             <h1 className="text-2xl font-bold text-center text-red-500 dark:text-red-400">
               Lesson not found
             </h1>
@@ -62,33 +67,30 @@ export default function LessonContent({ params }: LessonPageProps) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <SidebarProvider>
       <LessonSidebar
         courseId={params.courseId}
         unitId={params.unitId}
         lessonId={params.lessonId}
       />
-      <div className="relative flex-grow 2xl:pl-12">
+      <main className="flex-grow">
+        <div className="flex items-center justify-between p-4">
+          <SidebarTrigger>
+            <MdMenu size={24} />
+          </SidebarTrigger>
+        </div>
         <Breadcrumb
           pageName={
-            lessonError != null
-              ? "Error"
-              : isLessonLoading
-                ? "<LOADING>"
-                : lesson.title
+            lessonError ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title
           }
           parentPageName={
-            unitError != null
-              ? "Error"
-              : isUnitLoading
-                ? "<LOADING>"
-                : unit.title
+            unitError ? "Error" : isUnitLoading ? "<LOADING>" : unit.title
           }
           parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
           description=""
           className="!static"
         />
-        <div className="container flex justify-center">
+        <div className="container flex flex-col justify-center">
           {isLessonLoading ? (
             <Loader size={12} />
           ) : lesson.type === "reading" ? (
@@ -106,8 +108,8 @@ export default function LessonContent({ params }: LessonPageProps) {
             unitId={params.unitId}
           />
         </div>
-      </div>
-      <FloatingChat context={lesson.content} />
-    </div>
+        <FloatingChat context={lesson.content} />
+      </main>
+    </SidebarProvider>
   );
 }
