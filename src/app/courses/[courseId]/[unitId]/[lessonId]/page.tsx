@@ -1,4 +1,3 @@
-// app/courses/[courseId]/[unitId]/[lessonId]/page.tsx
 import { LessonContent } from "@/components/Lesson/LessonContent";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getToken } from "@/lib/auth";
@@ -7,7 +6,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 interface LessonPageProps {
   params: Promise<{

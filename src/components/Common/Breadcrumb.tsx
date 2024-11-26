@@ -19,9 +19,7 @@ const Breadcrumb = ({
 }) => {
   return (
     <>
-      <section
-        className={`relative z-10 header-space ${className}`}
-      >
+      <section className={`relative z-10 header-space ${className}`}>
         <div className="container">
           <div className="flex flex-wrap items-center -mx-4">
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">

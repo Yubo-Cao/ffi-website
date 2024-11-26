@@ -12,16 +12,16 @@ import {
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import type { QuizLesson } from "@/lib/course";
+import { setLearningProgress, type QuizLesson } from "@/lib/course";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 interface QuizContentProps {
+  userId: string;
   lesson: QuizLesson;
-  onComplete: () => void;
 }
 
-export function QuizContent({ lesson, onComplete }: QuizContentProps) {
+export function QuizContent({ lesson, userId }: QuizContentProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>(
     new Array(lesson.questions.length).fill(""),
@@ -43,7 +43,7 @@ export function QuizContent({ lesson, onComplete }: QuizContentProps) {
     if (isLastQuestion) {
       setShowResults(true);
       setIsSubmitted(true);
-      onComplete();
+      setLearningProgress(userId, lesson.id, "Completed");
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }

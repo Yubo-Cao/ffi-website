@@ -1,7 +1,6 @@
 "use client";
 
-import { Lesson } from "@/lib/course";
-import dynamic from "next/dynamic";
+import { Lesson, setLearningProgress } from "@/lib/course";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
@@ -9,17 +8,19 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 export type ReadContentProps = {
+  userId: string;
   lesson: Lesson;
-  onComplete: () => void;
 };
 
-export function ReadingContent({ lesson, onComplete }: ReadContentProps) {
+export function ReadingContent({ userId, lesson }: ReadContentProps) {
   const [hasCompleted, setHasCompleted] = useState(false);
+  const lessonId = lesson.id;
 
   useEffect(() => {
-    const handleScroll = () => {
+    try {
+      if (typeof window === "undefined") return;
+
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY;
@@ -27,13 +28,18 @@ export function ReadingContent({ lesson, onComplete }: ReadContentProps) {
 
       if (progress > 80 && !hasCompleted) {
         setHasCompleted(true);
-        onComplete();
+        try {
+          setLearningProgress(userId, lessonId, "Completed").catch((error) => {
+            console.error("Failed to update learning progress:", error);
+          });
+        } catch (error) {
+          console.error("Failed to update learning progress:", error);
+        }
       }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasCompleted, onComplete]);
+    } catch (error) {
+      console.error("Error in scroll handler:", error);
+    }
+  }, [hasCompleted, userId, lessonId]);
 
   return (
     <div className="container">

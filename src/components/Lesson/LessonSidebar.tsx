@@ -46,7 +46,7 @@ export function LessonSidebar({
     };
 
     fetchProgress();
-  }, []);
+  }, [uid]);
 
   return (
     <div className="h-full bg-muted/40">

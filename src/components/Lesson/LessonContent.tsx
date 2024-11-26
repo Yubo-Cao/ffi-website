@@ -1,5 +1,5 @@
-"use client";
-
+import { ProgressUpdater } from "./ProgressUpdater";
+import { QuizContent } from "./QuizContent";
 import { ReadingContent } from "./ReadingContent";
 import {
   Breadcrumb,
@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import type { Lesson, Unit } from "@/lib/course";
-import { setLearningProgress } from "@/lib/course";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -32,23 +30,6 @@ export function LessonContent({
   lessonId,
   userId,
 }: LessonContentProps) {
-  const [isProgressUpdated, setIsProgressUpdated] = useState(false);
-
-  useEffect(() => {
-    const updateProgress = async () => {
-      if (!isProgressUpdated) {
-        try {
-          await setLearningProgress(userId, lessonId, "In Progress");
-          setIsProgressUpdated(true);
-        } catch (error) {
-          console.error("Failed to update lesson progress:", error);
-        }
-      }
-    };
-
-    updateProgress();
-  }, [userId, lessonId, isProgressUpdated]);
-
   return (
     <div className="flex flex-col header-space">
       <header className="container">
@@ -83,19 +64,9 @@ export function LessonContent({
 
       <main className="container flex-1 py-8">
         {lesson.type === "reading" ? (
-          <ReadingContent
-            lesson={lesson}
-            onComplete={() => {
-              setLearningProgress(userId, lessonId, "Completed");
-            }}
-          />
+          <ReadingContent userId={userId} lesson={lesson} />
         ) : (
-          <QuizContent
-            lesson={lesson}
-            onComplete={() =>
-              setLearningProgress(userId, lessonId, "Completed")
-            }
-          />
+          <QuizContent userId={userId} lesson={lesson} />
         )}
 
         <LessonNavigation
@@ -105,6 +76,8 @@ export function LessonContent({
           unitId={unitId}
         />
       </main>
+
+      <ProgressUpdater userId={userId} lessonId={lessonId} />
     </div>
   );
 }
