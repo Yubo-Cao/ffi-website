@@ -1,115 +1,150 @@
 "use client";
 
-import Breadcrumb from "@/components/Common/Breadcrumb";
-import Loader from "@/components/Common/Loader";
-import { FloatingChat } from "@/components/Lesson/Chat";
-import { LessonNavigate } from "@/components/Lesson/LessonNavigate";
-import { useLesson } from "@/components/Lesson/LessonProvider";
-import LessonSidebar from "@/components/Lesson/LessonSidebar";
-import Quiz from "@/components/Lesson/Quiz/Quiz";
-import ReadingLesson from "@/components/Lesson/ReadingLesson";
-import { useUnit } from "@/components/Lesson/UnitProvider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ReadingContent } from "./ReadingContent";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import type { Lesson, Unit } from "@/lib/course";
+import { setLearningProgress } from "@/lib/course";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { MdError, MdMenu } from "react-icons/md";
+import { useEffect, useState } from "react";
 
-export type LessonPageProps = {
-  params: {
-    courseId: string;
-    unitId: string;
-    lessonId: string;
-  };
-};
+interface LessonContentProps {
+  lesson: Lesson;
+  unit: Unit;
+  courseId: string;
+  unitId: string;
+  lessonId: string;
+  userId: string;
+}
 
-export default function LessonContent({ params }: LessonPageProps) {
-  const { unit, error: unitError, isLoading: isUnitLoading } = useUnit();
-  const {
-    lesson,
-    isLoading: isLessonLoading,
-    error: lessonError,
-    setLesson,
-  } = useLesson();
+export function LessonContent({
+  lesson,
+  unit,
+  courseId,
+  unitId,
+  lessonId,
+  userId,
+}: LessonContentProps) {
+  const [isProgressUpdated, setIsProgressUpdated] = useState(false);
 
-  const header = (
-    <Breadcrumb
-      pageName={
-        lessonError ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title
+  useEffect(() => {
+    const updateProgress = async () => {
+      if (!isProgressUpdated) {
+        try {
+          await setLearningProgress(userId, lessonId, "In Progress");
+          setIsProgressUpdated(true);
+        } catch (error) {
+          console.error("Failed to update lesson progress:", error);
+        }
       }
-      parentPageName={
-        unitError ? "Error" : isUnitLoading ? "<LOADING>" : unit.title
-      }
-      parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
-      description=""
-      className="!static"
-    />
-  );
+    };
 
-  if (lessonError || unitError) {
-    return (
-      <div>
-        {header}
-        <section className="container">
-          <div className="flex flex-col items-center py-24">
-            <MdError className="w-24 h-24 text-red-500 dark:text-red-400" />
-            <h1 className="text-2xl font-bold text-center text-red-500 dark:text-red-400">
-              Lesson not found
-            </h1>
-            <p className="mt-4 text-lg font-medium text-center text-body-color">
-              Take me back to{" "}
-              <Link href="/public" className="text-primary">
-                home
-              </Link>
-            </p>
-          </div>
-        </section>
-      </div>
-    );
-  }
+    updateProgress();
+  }, [userId, lessonId, isProgressUpdated]);
 
   return (
-    <SidebarProvider>
-      <LessonSidebar
-        courseId={params.courseId}
-        unitId={params.unitId}
-        lessonId={params.lessonId}
-      />
-      <main className="flex-grow">
-        <div className="flex items-center justify-between p-4">
-          <SidebarTrigger>
-            <MdMenu size={24} />
-          </SidebarTrigger>
-        </div>
-        <Breadcrumb
-          pageName={
-            lessonError ? "Error" : isLessonLoading ? "<LOADING>" : lesson.title
-          }
-          parentPageName={
-            unitError ? "Error" : isUnitLoading ? "<LOADING>" : unit.title
-          }
-          parentPageLink={`/courses/${params.courseId}/${params.unitId}`}
-          description=""
-          className="!static"
-        />
-        <div className="container flex flex-col justify-center">
-          {isLessonLoading ? (
-            <Loader size={12} />
-          ) : lesson.type === "reading" ? (
-            <ReadingLesson
-              content={lesson.content}
-              lesson={lesson}
-              setLesson={setLesson}
-            />
-          ) : (
-            <Quiz lesson={lesson} setLesson={setLesson} />
-          )}
-          <LessonNavigate
+    <div className="flex flex-col header-space">
+      <header className="container">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/courses/${courseId}`}>
+                Course
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <ChevronRight className="w-4 h-4" />
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/courses/${courseId}/${unitId}`}>
+                {unit.title}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <ChevronRight className="w-4 h-4" />
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                href={`/courses/${courseId}/${unitId}/${lessonId}`}
+              >
+                {lesson.title}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </header>
+
+      <main className="container flex-1 py-8">
+        {lesson.type === "reading" ? (
+          <ReadingContent
             lesson={lesson}
-            courseId={params.courseId}
-            unitId={params.unitId}
+            onComplete={() => {
+              setLearningProgress(userId, lessonId, "Completed");
+            }}
           />
-        </div>
-        <FloatingChat context={lesson.content} />
+        ) : (
+          <QuizContent
+            lesson={lesson}
+            onComplete={() =>
+              setLearningProgress(userId, lessonId, "Completed")
+            }
+          />
+        )}
+
+        <LessonNavigation
+          lesson={lesson}
+          unit={unit}
+          courseId={courseId}
+          unitId={unitId}
+        />
       </main>
-    </SidebarProvider>
+    </div>
+  );
+}
+
+function LessonNavigation({
+  lesson,
+  unit,
+  courseId,
+  unitId,
+}: {
+  lesson: Lesson;
+  unit: Unit;
+  courseId: string;
+  unitId: string;
+}) {
+  const currentIndex = unit.lessons.findIndex((l) => l.id === lesson.id);
+  const prevLesson = unit.lessons[currentIndex - 1];
+  const nextLesson = unit.lessons[currentIndex + 1];
+
+  return (
+    <div>
+      <div className="container flex justify-between mt-8">
+        {prevLesson ? (
+          <Button variant="outline" asChild>
+            <Link href={`/courses/${courseId}/${unitId}/${prevLesson.id}`}>
+              Previous Lesson
+            </Link>
+          </Button>
+        ) : (
+          <div />
+        )}
+
+        {nextLesson && (
+          <Button asChild variant="outline">
+            <Link href={`/courses/${courseId}/${unitId}/${nextLesson.id}`}>
+              Next Lesson
+            </Link>
+          </Button>
+        )}
+      </div>
+    </div>
   );
 }

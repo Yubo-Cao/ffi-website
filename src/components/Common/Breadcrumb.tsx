@@ -20,10 +20,10 @@ const Breadcrumb = ({
   return (
     <>
       <section
-        className={`relative z-10 pt-[120px] sm:pt-[180px] lg:pt-[206px] ${className}`}
+        className={`relative z-10 header-space ${className}`}
       >
         <div className="container">
-          <div className="-mx-4 flex flex-wrap items-center">
+          <div className="flex flex-wrap items-center -mx-4">
             <div className="w-full px-4 md:w-8/12 lg:w-7/12">
               <div
                 className={`max-w-[570px] ${description && "mb-8 md:mb-0 lg:mb-12"}`}
@@ -35,7 +35,7 @@ const Breadcrumb = ({
                     {pageName}
                   </h1>
                 ) : (
-                  <h1 className="mb-5 h-8 w-1/2 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></h1>
+                  <h1 className="w-1/2 h-8 mb-5 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></h1>
                 )}
                 {description !== "<LOADING>" ? (
                   isEditing ? (
@@ -57,7 +57,7 @@ const Breadcrumb = ({
                     )
                   )
                 ) : (
-                  <div className="h-4 w-full animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
+                  <div className="w-full h-4 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
                 )}
               </div>
             </div>
@@ -72,10 +72,10 @@ const Breadcrumb = ({
                       {parentPageName !== "<LOADING>" ? (
                         parentPageName
                       ) : (
-                        <div className="h-6 w-20 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></div>
+                        <div className="w-20 h-6 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></div>
                       )}
                     </Link>
-                    <span className="mr-3 block h-2 w-2 rotate-45 border-r-2 border-t-2 border-body-color"></span>
+                    <span className="block w-2 h-2 mr-3 rotate-45 border-t-2 border-r-2 border-body-color"></span>
                   </li>
                   {pageName !== "<LOADING>" ? (
                     isEditing ? (
@@ -92,7 +92,7 @@ const Breadcrumb = ({
                       </li>
                     )
                   ) : (
-                    <li className="ml-3 h-6 w-20 animate-pulse rounded-sm bg-gray-200 dark:bg-gray-800"></li>
+                    <li className="w-20 h-6 ml-3 bg-gray-200 rounded-sm animate-pulse dark:bg-gray-800"></li>
                   )}
                 </ul>
               </div>

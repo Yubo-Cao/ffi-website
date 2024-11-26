@@ -20,19 +20,6 @@ const Header = () => {
     setNavbarOpen(!navbarOpen);
   };
 
-  // Sticky Navbar
-  const [sticky, setSticky] = useState(false);
-  const handleStickyNavbar = () => {
-    if (window.scrollY >= 80) {
-      setSticky(true);
-    } else {
-      setSticky(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", handleStickyNavbar);
-  });
-
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index) => {
@@ -48,16 +35,12 @@ const Header = () => {
   return (
     <>
       <header
-        className={`header left-0 top-0 z-40 flex w-full items-center bg-bg-color ${INTER.className} ${
-          sticky
-            ? "fixed z-[9999] !bg-opacity-80 shadow-sticky backdrop-blur-sm transition dark:shadow-sticky-dark"
-            : "absolute z-[9999]"
-        }`}
+        className={`header left-0 top-0 z-40 flex w-full items-center bg-bg-color ${INTER.className} fixed z-[80] !bg-opacity-80 shadow-sticky backdrop-blur-sm transition dark:shadow-sticky-dark`}
       >
         <div className="container">
           <div className="relative flex items-center justify-between">
             <div className="w-24 max-w-full p-4 xl:mr-12">
-              <Link href="/" className={`header-logo block w-full lg:py-6`}>
+              <Link href="/" className={`block w-full lg:py-2`}>
                 <Image
                   src={LOGO}
                   alt="logo"
@@ -68,7 +51,7 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="flex w-full items-center justify-between px-4">
+            <div className="flex items-center justify-between w-full px-4">
               <div className="hidden lg:block"></div>
               <div>
                 <button
@@ -103,7 +86,7 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
+                      <li key={index} className="relative group">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -119,7 +102,7 @@ const Header = () => {
                           <>
                             <p
                               onClick={() => handleSubmenu(index)}
-                              className="flex cursor-pointer items-center justify-between py-2 text-base text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                              className="flex items-center justify-between py-2 text-base cursor-pointer text-dark group-hover:text-primary dark:text-white/70 dark:group-hover:text-white lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
                             >
                               {menuItem.title}
                               <span className="pl-3">
@@ -166,7 +149,7 @@ const Header = () => {
                         <Image
                           src={user.photoURL}
                           alt="profile"
-                          className="h-10 w-10 rounded-full"
+                          className="w-10 h-10 rounded-full"
                           width={40}
                           height={40}
                         />

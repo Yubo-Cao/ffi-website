@@ -94,10 +94,6 @@
     @apply inline-flex;
   }
 
-  .sticky .header-logo {
-    @apply py-5 lg:py-2;
-  }
-
   .sticky .menu-scroll.active {
     @apply opacity-70;
   }
@@ -113,7 +109,7 @@
 
 @layer utilities {
   .header-space {
-    @apply pt-[120px] sm:pt-[180px] lg:pt-[206px];
+    @apply pt-[120px] sm:pt-[132px] lg:pt-[142px];
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -142,5 +138,4 @@
 }
 
 @layer base {
-
 }

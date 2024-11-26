@@ -101,7 +101,7 @@ const Member: React.FC<TeamMember> = ({ name, role, image, bio, altImage }) => {
               damping: 30,
               duration: 0.3,
             }}
-            className="w-full max-w-4xl p-6 bg-white rounded-lg"
+            className="w-full max-w-4xl p-6 bg-white rounded-lg dark:bg-bg-color-dark"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-row items-center gap-4">
@@ -144,7 +144,7 @@ const Member: React.FC<TeamMember> = ({ name, role, image, bio, altImage }) => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.3 }}
-                  className="text-base leading-loose text-gray-700"
+                  className="text-base leading-loose text-foreground"
                 >
                   {bio}
                 </motion.p>

@@ -12,6 +12,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  serverTimestamp,
 } from "@firebase/firestore";
 
 export interface Course {
@@ -137,10 +138,6 @@ export interface LearningProgress {
    */
   userId: User["id"];
   /**
-   * The course that the learning progress is for.
-   */
-  courseId: Course["id"];
-  /**
    * The lesson that the learning progress is for.
    */
   lessonId: Lesson["id"];
@@ -178,7 +175,21 @@ export async function getCourse(courseId: string): Promise<Course> {
         title: unit.data().title,
         precedence: unit.data().precedence,
         description: unit.data().description,
-        lessons: [],
+        lessons: (
+          await getDocs(
+            query(
+              LESSON_COL,
+              where("unit", "==", unit.ref),
+              orderBy("precedence"),
+            ),
+          )
+        ).docs.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.data().title,
+          precedence: lesson.data().precedence,
+          content: lesson.data().content,
+          type: lesson.data().type,
+        })),
       };
     }),
   );
@@ -307,26 +318,24 @@ export const enrollCourse = async (
   userId: string,
   courseId: string,
 ): Promise<Enrollment> => {
-  const enrollment = await getDocs(
-    query(
-      collection(db, "enrollments"),
-      where("user", "==", doc(USER_COL, userId)),
-      where("course", "==", doc(COURSE_COL, courseId)),
-    ),
-  );
-  if (!enrollment.empty) {
-    throw new Error("Already enrolled");
-  }
   const enrollmentRef = await addDoc(ENROLLMENT_COL, {
     user: doc(USER_COL, userId),
     course: doc(COURSE_COL, courseId),
-    createdAt: new Date(),
+    createdAt: serverTimestamp(),
   });
+
+  const enrollmentDoc = await getDoc(enrollmentRef);
+  const data = enrollmentDoc.data();
+
+  if (!data) {
+    throw new Error("Failed to create enrollment");
+  }
+
   return {
     id: enrollmentRef.id,
     courseId,
     userId,
-    createdAt: new Date(),
+    createdAt: data.createdAt.toDate(),
   };
 };
 
@@ -344,26 +353,84 @@ export const ensureEnrolled = async (
 
 export const getLearningProgress = async (
   userId: string,
-  courseId?: string,
   lessonId?: string,
 ): Promise<LearningProgress[]> => {
   const learningProgress = await getDocs(
     query(
       LEARNING_PROGRESS_COL,
       where("user", "==", doc(USER_COL, userId)),
-      ...(courseId ? [where("course", "==", doc(COURSE_COL, courseId))] : []),
       ...(lessonId ? [where("lesson", "==", doc(LESSON_COL, lessonId))] : []),
     ),
   );
   return learningProgress.docs.map((progress) => ({
     id: progress.id,
     userId: progress.data().user.id,
-    courseId: progress.data().course.id,
     lessonId: progress.data().lesson.id,
     progress: progress.data().progress,
     createdAt: progress.data().createdAt.toDate(),
   }));
 };
+
+export const setLearningProgress = async (
+  userId: string,
+  lessonId: string,
+  progress: string,
+): Promise<LearningProgress> => {
+  const existingProgress = await getDocs(
+    query(
+      LEARNING_PROGRESS_COL,
+      where("user", "==", doc(USER_COL, userId)),
+      where("lesson", "==", doc(LESSON_COL, lessonId)),
+    ),
+  );
+
+  if (!existingProgress.empty) {
+    // Update existing progress
+    const progressDoc = existingProgress.docs[0];
+    await updateDoc(progressDoc.ref, {
+      progress,
+      updatedAt: serverTimestamp(),
+    });
+
+    return {
+      id: progressDoc.id,
+      userId,
+      lessonId,
+      progress,
+      createdAt: progressDoc.data().createdAt.toDate(),
+    };
+  }
+
+  // Create new progress
+  const newProgress = await addDoc(LEARNING_PROGRESS_COL, {
+    user: doc(USER_COL, userId),
+    lesson: doc(LESSON_COL, lessonId),
+    progress,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+
+  return {
+    id: newProgress.id,
+    userId,
+    lessonId,
+    progress,
+    createdAt: new Date(),
+  };
+};
+
+export async function updateLessonProgress(
+  userId: string,
+  lessonId: string,
+  progress: string,
+) {
+  try {
+    return await setLearningProgress(userId, lessonId, progress);
+  } catch (error) {
+    console.error("Failed to update learning progress:", error);
+    throw new Error("Failed to update progress");
+  }
+}
 
 export async function getLesson(lessonId: string): Promise<Lesson> {
   const lesson = await getDoc(doc(LESSON_COL, lessonId));

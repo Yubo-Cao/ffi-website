@@ -27,7 +27,10 @@ module.exports = {
         white: "#FFFFFF",
         black: colors.slate[950],
         dark: colors.slate[800],
-        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        primary: {
+          DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
+          foreground: "hsl(var(--primary-foreground))",
+        },
         yellow: "#FBB040",
         "bg-color-dark": colors.slate[900],
         "body-color": "rgb(var(--color-text) / <alpha-value>)",
