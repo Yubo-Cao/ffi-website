@@ -6,10 +6,10 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: ["class", "class"],
+  darkMode: "class",
   theme: {
     container: {
-      center: "true",
+      center: true,
       padding: "1rem",
     },
     screens: {
@@ -27,10 +27,7 @@ module.exports = {
         white: "#FFFFFF",
         black: colors.slate[950],
         dark: colors.slate[800],
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
         yellow: "#FBB040",
         "bg-color-dark": colors.slate[900],
         "body-color": "rgb(var(--color-text) / <alpha-value>)",

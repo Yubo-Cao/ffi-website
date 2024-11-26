@@ -152,7 +152,7 @@ const Hero = () => {
           ref={overlayRef}
         ></div>
         <div
-          className="absolute z-0 origin-center bg-white rounded-full opacity-0 size-48 abs-center"
+          className="absolute z-0 origin-center bg-white rounded-full opacity-0 dark:bg-bg-color-dark size-48 abs-center"
           style={{
             willChange: "transform",
           }}
@@ -162,7 +162,7 @@ const Hero = () => {
           src={LOGO}
           alt={NAME}
           ref={logoRef}
-          className="z-10 origin-center opacity-0 abs-center"
+          className="z-10 origin-center opacity-0 abs-center dark:invert"
           width={198}
           height={198}
         />
