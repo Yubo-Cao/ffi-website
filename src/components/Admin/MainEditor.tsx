@@ -1,16 +1,19 @@
 "use client";
 
+import MainContent from "./MainContent";
+import MainEditorSkeleton from "./MainEditorSkeleton";
+import AppSidebar from "./Sidebar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "../ui/breadcrumb";
-import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
-import MainContent from "./MainContent";
-import MainEditorSkeleton from "./MainEditorSkeleton";
-import AppSidebar from "./Sidebar";
+} from "@/components/ui/breadcrumb";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 import {
   Course,
   getCourse,
@@ -29,82 +32,187 @@ interface MainEditorProps {
 }
 
 const MainEditorContent: React.FC<MainEditorProps> = ({ courseId }) => {
+  const { toast } = useToast();
   const [course, setCourseState] = useState<Course | null>(null);
   const [parentId, setParentId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<{
     type: "course" | "unit" | "lesson";
     data: Course | Unit | Lesson;
   } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchCourse() {
-      const courseData = await getCourse(courseId);
-      setCourseState(courseData);
-      setSelectedItem({ type: "course", data: courseData });
+      try {
+        const courseData = await getCourse(courseId);
+        setCourseState(courseData);
+        setSelectedItem({ type: "course", data: courseData });
+        setError(null);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load course";
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Error Loading Course",
+          description: errorMessage,
+        });
+      }
     }
     fetchCourse();
-  }, [courseId]);
+  }, [courseId, toast]);
 
   const handleSelectItem = (
     parentId: string | null,
     type: "course" | "unit" | "lesson",
     data: Course | Unit | Lesson,
   ) => {
-    setSelectedItem({ type, data });
-    setParentId(parentId);
+    try {
+      setSelectedItem({ type, data });
+      setParentId(parentId);
+      setError(null);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to select item";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Error Selecting Item",
+        description: errorMessage,
+      });
+    }
   };
 
-  const handleUpdateCourse = (updatedCourse: Course) => {
-    setCourseState(updatedCourse);
-    setSelectedItem({ type: "course", data: updatedCourse });
-    setCourse(updatedCourse);
+  const handleUpdateCourse = async (updatedCourse: Course) => {
+    try {
+      setCourseState(updatedCourse);
+      setSelectedItem({ type: "course", data: updatedCourse });
+      await setCourse(updatedCourse);
+      setError(null);
+      toast({
+        title: "Course Updated",
+        description: "Course has been successfully updated",
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update course";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Error Updating Course",
+        description: errorMessage,
+      });
+    }
   };
 
-  const handleUpdateUnit = (updatedUnit: Unit) => {
+  const handleUpdateUnit = async (updatedUnit: Unit) => {
     if (!course) return;
-    const updatedUnits = course.units.map((unit) =>
-      unit.id === updatedUnit.id ? updatedUnit : unit,
-    );
-    const updatedCourse = { ...course, units: updatedUnits };
-    setCourseState(updatedCourse);
-    setSelectedItem({ type: "unit", data: updatedUnit });
-    setUnit(updatedUnit);
-  };
-
-  const handleUpdateLesson = (updatedLesson: Lesson, unitId: string) => {
-    if (!course) return;
-    const updatedUnits = course.units.map((unit) => {
-      if (unit.id !== unitId) return unit;
-      const updatedLessons = unit.lessons.map((lesson) =>
-        lesson.id === updatedLesson.id ? updatedLesson : lesson,
+    try {
+      const updatedUnits = course.units.map((unit) =>
+        unit.id === updatedUnit.id ? updatedUnit : unit,
       );
-      return { ...unit, lessons: updatedLessons };
-    });
-    const updatedCourse = { ...course, units: updatedUnits };
-    setCourseState(updatedCourse);
-    setSelectedItem({ type: "lesson", data: updatedLesson });
-    setLesson(updatedLesson);
+      const updatedCourse = { ...course, units: updatedUnits };
+      setCourseState(updatedCourse);
+      setSelectedItem({ type: "unit", data: updatedUnit });
+      await setUnit(updatedUnit);
+      setError(null);
+      toast({
+        title: "Unit Updated",
+        description: "Unit has been successfully updated",
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update unit";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Error Updating Unit",
+        description: errorMessage,
+      });
+    }
   };
 
-  const handleReorderUnitsLessons = (updatedUnits: Unit[]) => {
+  const handleUpdateLesson = async (updatedLesson: Lesson, unitId: string) => {
     if (!course) return;
-    const updatedCourse = { ...course, units: updatedUnits };
-    setCourseState(updatedCourse);
-    updatedUnits.forEach((unit) => {
-      setUnit(unit);
-      unit.lessons.forEach((lesson) => setLesson(lesson));
-    });
+    try {
+      const updatedUnits = course.units.map((unit) => {
+        if (unit.id !== unitId) return unit;
+        const updatedLessons = unit.lessons.map((lesson) =>
+          lesson.id === updatedLesson.id ? updatedLesson : lesson,
+        );
+        return { ...unit, lessons: updatedLessons };
+      });
+      const updatedCourse = { ...course, units: updatedUnits };
+      setCourseState(updatedCourse);
+      setSelectedItem({ type: "lesson", data: updatedLesson });
+      await setLesson(updatedLesson);
+      setError(null);
+      toast({
+        title: "Lesson Updated",
+        description: "Lesson has been successfully updated",
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update lesson";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Error Updating Lesson",
+        description: errorMessage,
+      });
+    }
   };
 
-  if (!course) {
+  const handleReorderUnitsLessons = async (updatedUnits: Unit[]) => {
+    if (!course) return;
+    try {
+      const updatedCourse = { ...course, units: updatedUnits };
+      setCourseState(updatedCourse);
+
+      for (const unit of updatedUnits) {
+        await setUnit(unit);
+        for (const lesson of unit.lessons) {
+          await setLesson(lesson);
+        }
+      }
+
+      setError(null);
+      toast({
+        title: "Order Updated",
+        description: "Course structure has been successfully reordered",
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to reorder items";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Error Reordering Items",
+        description: errorMessage,
+      });
+    }
+  };
+
+  if (!course && !error) {
     return <MainEditorSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="p-4">
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    );
   }
 
   return (
     <SidebarProvider>
       <DndProvider backend={HTML5Backend}>
         <AppSidebar
-          course={course}
+          course={course!}
           onSelectItem={handleSelectItem}
           onReorderUnitsLessons={handleReorderUnitsLessons}
           selectedItem={{
@@ -114,7 +222,7 @@ const MainEditorContent: React.FC<MainEditorProps> = ({ courseId }) => {
         />
       </DndProvider>
 
-      <main className="container w-full pl-4 header-space ">
+      <main className="container w-full pl-4 header-space">
         <div className="flex flex-row items-center gap-2">
           <SidebarTrigger />
 
@@ -144,6 +252,8 @@ const MainEditorContent: React.FC<MainEditorProps> = ({ courseId }) => {
           key={selectedItem?.data.id}
         />
       </main>
+
+      <Toaster />
     </SidebarProvider>
   );
 };

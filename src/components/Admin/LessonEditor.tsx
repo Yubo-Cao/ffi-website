@@ -2,7 +2,12 @@
 
 import { Button } from "../ui/button";
 import { Lesson } from "@/lib/course";
+import MDEditor from "@uiw/react-md-editor";
 import React, { useState } from "react";
+import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 interface LessonEditorProps {
   lesson: Lesson;
@@ -34,17 +39,18 @@ const LessonEditor: React.FC<LessonEditorProps> = ({
       {lesson.type === "reading" && (
         <div className="mb-4">
           <label className="block font-medium">Content</label>
-          <textarea
-            className="w-full p-2 border"
+          <MDEditor
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={10}
+            onChange={setContent}
+            className="min-h-[50vh]"
+            previewOptions={{
+              rehypePlugins: [[rehypeKatex, rehypeRaw]],
+              remarkPlugins: [[remarkGfm, remarkMath]],
+            }}
           />
         </div>
       )}
-      <Button onClick={handleSave}>
-        Save
-      </Button>
+      <Button onClick={handleSave}>Save</Button>
     </div>
   );
 };
