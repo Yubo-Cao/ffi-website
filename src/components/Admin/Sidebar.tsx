@@ -1,15 +1,20 @@
 "use client";
 
+import { Button } from "../ui/button";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
 } from "../ui/sidebar";
 import UnitItem from "./UnitItem";
-import { Course, Lesson, Unit } from "@/lib/course";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "@/hooks/use-toast";
+import { addUnit, Course, Lesson, removeUnit, Unit } from "@/lib/course";
 import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 import React from "react";
 
 interface AppSidebarProps {
@@ -24,6 +29,7 @@ interface AppSidebarProps {
     type: "course" | "unit" | "lesson";
     id: string;
   } | null;
+  onUpdateCourse: (course: Course) => void;
 }
 
 const AppSidebar: React.FC<AppSidebarProps> = ({
@@ -31,6 +37,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   selectedItem,
   onSelectItem,
   onReorderUnitsLessons,
+  onUpdateCourse,
 }) => {
   const moveUnit = (dragIndex: number, hoverIndex: number) => {
     const newUnits = [...course.units];
@@ -62,6 +69,54 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     onReorderUnitsLessons(updatedUnits);
   };
 
+  const handleAddUnit = async () => {
+    try {
+      const newUnit = await addUnit(course.id, {
+        title: "New Unit",
+        description: "",
+        precedence: course.units.length + 1,
+        lessons: [],
+      });
+      const updatedUnits = [...course.units, newUnit];
+      onUpdateCourse({ ...course, units: updatedUnits });
+      toast({
+        title: "Success",
+        description: "Unit added successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add unit",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteUnit = async (unitId: string) => {
+    try {
+      await removeUnit(unitId);
+      const updatedUnits = course.units.filter((unit) => unit.id !== unitId);
+      onUpdateCourse({ ...course, units: updatedUnits });
+      toast({
+        title: "Success",
+        description: "Unit deleted successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete unit",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdateUnit = (updatedUnit: Unit) => {
+    const updatedUnits = course.units.map((unit) =>
+      unit.id === updatedUnit.id ? updatedUnit : unit,
+    );
+    onUpdateCourse({ ...course, units: updatedUnits });
+  };
+
   return (
     <Sidebar>
       <div className="header-space"></div>
@@ -78,27 +133,37 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
       <SidebarContent className="mx-4">
         <SidebarGroup>
           <SidebarGroupContent>
-            <ul>
-              {course.units.map((unit, index) => (
-                <UnitItem
-                  key={unit.id}
-                  unit={unit}
-                  index={index}
-                  moveUnit={moveUnit}
-                  onSelectItem={onSelectItem}
-                  parentId={course.id}
-                  moveLesson={moveLesson}
-                  selectedItem={
-                    selectedItem.type !== "course"
-                      ? (selectedItem as any)
-                      : null
-                  }
-                />
-              ))}
-            </ul>
+            <ScrollArea>
+              <ul>
+                {course.units.map((unit, index) => (
+                  <UnitItem
+                    key={unit.id}
+                    unit={unit}
+                    index={index}
+                    moveUnit={moveUnit}
+                    onSelectItem={onSelectItem}
+                    parentId={course.id}
+                    moveLesson={moveLesson}
+                    selectedItem={
+                      selectedItem.type !== "course"
+                        ? (selectedItem as any)
+                        : null
+                    }
+                    onDeleteUnit={handleDeleteUnit}
+                    onUpdateUnit={handleUpdateUnit}
+                  />
+                ))}
+              </ul>
+            </ScrollArea>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <Button variant="outline" size="sm" onClick={handleAddUnit}>
+          <Plus className="w-4 h-4" />
+          Add Unit
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 };

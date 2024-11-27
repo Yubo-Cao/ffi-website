@@ -8,12 +8,12 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <>
-      <footer className="relative z-10 dark:bg-gray-dark pt-16 md:pt-20 lg:pt-24 bg-white">
+      <footer className="relative pt-16 bg-white dark:bg-gray-dark md:pt-20 lg:pt-24">
         <div className="container">
-          <div className="-mx-4 flex flex-wrap">
+          <div className="flex flex-wrap -mx-4">
             <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-5/12">
               <div className="mb-12 max-w-[128px] lg:mb-16">
-                <Link href="/" className="mb-8 inline-block">
+                <Link href="/" className="inline-block mb-8">
                   <Image
                     src={LOGO}
                     alt={NAME}
@@ -22,7 +22,7 @@ const Footer = () => {
                     height={48}
                   />
                 </Link>
-                <p className="dark:text-body-color-dark mb-9 text-base leading-relaxed text-body-color">
+                <p className="text-base leading-relaxed dark:text-body-color-dark mb-9 text-body-color">
                   Innovating Finance, Shaping Futures
                 </p>
                 <SocialLinks />
@@ -37,7 +37,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="/"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 dark:text-body-color-dark text-body-color hover:text-primary dark:hover:text-primary"
                     >
                       Home
                     </Link>
@@ -45,7 +45,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="/actions"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 dark:text-body-color-dark text-body-color hover:text-primary dark:hover:text-primary"
                     >
                       Actions
                     </Link>
@@ -53,7 +53,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="/about"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 dark:text-body-color-dark text-body-color hover:text-primary dark:hover:text-primary"
                     >
                       About
                     </Link>
@@ -71,7 +71,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="/get-involved"
-                      className="dark:text-body-color-dark mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 dark:text-body-color-dark text-body-color hover:text-primary dark:hover:text-primary"
                     >
                       Join us as a State Leader
                     </Link>

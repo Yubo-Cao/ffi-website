@@ -1,8 +1,9 @@
 "use client";
 
+import { Button } from "../ui/button";
 import { Lesson } from "@/lib/course";
 import { cn } from "@/lib/utils";
-import { FileText } from "lucide-react";
+import { FileText, Trash2 } from "lucide-react";
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 
@@ -16,6 +17,7 @@ interface LessonItemProps {
     type: "unit" | "lesson";
     id: string;
   };
+  onDeleteLesson: (lessonId: string) => void;
 }
 
 const LessonItem: React.FC<LessonItemProps> = ({
@@ -25,6 +27,7 @@ const LessonItem: React.FC<LessonItemProps> = ({
   selectedItem,
   moveLesson,
   onSelectItem,
+  onDeleteLesson,
 }) => {
   const ref = useRef<HTMLLIElement>(null);
   const selected =
@@ -57,16 +60,28 @@ const LessonItem: React.FC<LessonItemProps> = ({
   const opacity = isDragging ? 0.5 : 1;
 
   return (
-    <li ref={ref} style={{ opacity }} className="mb-1">
+    <li ref={ref} style={{ opacity }} className="mb-1 group/lesson">
       <div
-        onClick={() => onSelectItem("lesson", lesson)}
         className={cn(
-          "flex items-center cursor-pointer py-0.5 px-0.5",
+          "flex items-center justify-between",
           selected ? "bg-primary/10 rounded-sm" : "",
         )}
       >
-        <FileText className="w-4 h-4 mr-2" />
-        {lesson.title}
+        <div
+          onClick={() => onSelectItem("lesson", lesson)}
+          className={"flex items-center cursor-pointer py-0.5 px-0.5 flex-1"}
+        >
+          <FileText className="w-4 h-4 mr-2" />
+          {lesson.title}
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onDeleteLesson(lesson.id)}
+          className="w-6 h-6 p-0 opacity-0 text-destructive group-hover/lesson:opacity-100"
+        >
+          <Trash2 className="w-3 h-3" />
+        </Button>
       </div>
     </li>
   );

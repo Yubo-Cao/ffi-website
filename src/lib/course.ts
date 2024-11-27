@@ -290,6 +290,10 @@ export async function addUnit(
 
 export async function removeUnit(unitId: string): Promise<void> {
   await deleteDoc(doc(UNIT_COL, unitId));
+  const lessons = await getDocs(
+    query(LESSON_COL, where("unit", "==", doc(UNIT_COL, unitId))),
+  );
+  await Promise.all(lessons.docs.map((lesson) => deleteDoc(lesson.ref)));
 }
 
 export async function setUnit(updatedUnit: Unit): Promise<void> {

@@ -215,6 +215,7 @@ const MainEditorContent: React.FC<MainEditorProps> = ({ courseId }) => {
           course={course!}
           onSelectItem={handleSelectItem}
           onReorderUnitsLessons={handleReorderUnitsLessons}
+          onUpdateCourse={setCourseState}
           selectedItem={{
             type: selectedItem?.type,
             id: selectedItem?.data.id,
@@ -236,7 +237,7 @@ const MainEditorContent: React.FC<MainEditorProps> = ({ courseId }) => {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink href={`/admin/${courseId}`}>
-                  Course "{courseId}"
+                  {course?.title}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
