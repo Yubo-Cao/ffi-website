@@ -201,6 +201,14 @@ export async function getCourse(courseId: string): Promise<Course> {
   };
 }
 
+export async function setCourse(updatedCourse: Course): Promise<void> {
+  const courseRef = doc(COURSE_COL, updatedCourse.id);
+  await updateDoc(courseRef, {
+    title: updatedCourse.title,
+    description: updatedCourse.description,
+  });
+}
+
 export interface CourseSummary {
   id: string;
   title: string;
