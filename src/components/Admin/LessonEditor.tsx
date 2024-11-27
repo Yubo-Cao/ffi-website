@@ -1,6 +1,5 @@
-"use client";
-
 import { Button } from "../ui/button";
+import { imageCommand } from "./ImageCommand";
 import { Lesson } from "@/lib/course";
 import MDEditor from "@uiw/react-md-editor";
 import React, { useState } from "react";
@@ -31,7 +30,7 @@ const LessonEditor: React.FC<LessonEditorProps> = ({
       <div className="mb-4">
         <label className="block font-medium">Title</label>
         <input
-          className="w-full p-2 border"
+          className="w-full p-2 border rounded"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -47,6 +46,7 @@ const LessonEditor: React.FC<LessonEditorProps> = ({
               rehypePlugins: [[rehypeKatex, rehypeRaw]],
               remarkPlugins: [[remarkGfm, remarkMath]],
             }}
+            extraCommands={[imageCommand]}
           />
         </div>
       )}
