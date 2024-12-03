@@ -46,6 +46,7 @@ export const teamMembers: {
     },
     {
       name: "Nisarg Parekh",
+      image: "/images/team/Nisarg Parekh.png",
       role: "Marketing/Outreach",
     },
     {
@@ -61,6 +62,8 @@ export const teamMembers: {
     {
       name: "Daniel Neuner",
       role: "Director of Strategic Planning",
+      image: "/images/team/Daniel Neuner.png",
+      bio: "A student from St. Louis, I’ve never taken a business or finance class in my life. Through Future Finance Inc, I am able to build financial knowledge through research and educate other young Americans in the process.",
     },
   ],
   regionals: [
