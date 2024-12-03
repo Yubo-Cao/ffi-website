@@ -1,11 +1,13 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import EnrolledCourses from "@/components/Dashboard/EnrolledCourses";
+import EnrolledCourses from "@/components/Dashboard/enrolled-courses";
+import { CoursesSkeleton } from "@/components/Dashboard/loading";
 import { clientConfig, serverConfig } from "@/lib/config";
 import { NAME } from "@/lib/constants";
 import { Metadata } from "next";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: `Dashboard | ${NAME}`,
@@ -30,7 +32,11 @@ const DashboardPage = async () => {
         pageName="Dashboard"
         description="Learn about financial literacy and entrepreneurship."
       />
-      <EnrolledCourses />
+      <main className="container mb-8">
+        <Suspense fallback={<CoursesSkeleton />}>
+          <EnrolledCourses />
+        </Suspense>
+      </main>
     </>
   );
 };
