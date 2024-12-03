@@ -2,6 +2,7 @@ import Brands from "@/components/Brands";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import SectionTitle from "@/components/Common/SectionTitle";
 import Team from "@/components/Team";
+import MembersMap from "@/components/Team/members-map";
 import { BASE_URL, NAME } from "@/lib/constants";
 import { defaultMetadata } from "@/lib/metadata";
 import { Metadata } from "next";
@@ -44,6 +45,7 @@ const AboutPage = () => {
           </p>
         </div>
       </section>
+      <MembersMap />
       <Team />
       <section id="sponsors" className="pb-16 md:py-20 lg:py-28">
         <div className="container">
