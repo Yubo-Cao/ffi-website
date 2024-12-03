@@ -97,6 +97,9 @@ async function CourseContent({ courseId }: { courseId: string }) {
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
+  // under construction
+  return notFound();
+
   const resolvedParams = await params;
 
   return (
